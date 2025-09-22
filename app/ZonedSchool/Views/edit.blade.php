@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')Edit Zone Address | {{config('APP_NAME',env("APP_NAME"))}} @endsection
+@section('title')Edit Zone Address | {{config('app.name',env("APP_NAME"))}} @endsection
 @section('content')
 
 <style type="text/css">

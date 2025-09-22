@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title') District Configuration | {{config('APP_NAME',env("APP_NAME"))}} @endsection
+@section('title') District Configuration | {{config('app.name',env("APP_NAME"))}} @endsection
 @section('styles')
 <style type="text/css">
     .error {

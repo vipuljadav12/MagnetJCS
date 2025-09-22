@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @section('title')
-    Gifted Students | {{ config('APP_NAME', env('APP_NAME')) }}
+    Gifted Students | {{ config('app.name', env('APP_NAME')) }}
 @endsection
 @section('styles')
     <!-- DataTables -->

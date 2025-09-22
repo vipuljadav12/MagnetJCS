@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')Edit Eligibility Value  | {{config('APP_NAME',env("APP_NAME"))}}  @endsection
+@section('title')Edit Eligibility Value  | {{config('app.name',env("APP_NAME"))}}  @endsection
 @section('styles')
     <script type="text/javascript">var BASE_URL = '{{url('/')}}';</script>
     <style>

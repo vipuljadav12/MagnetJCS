@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => 'smtp.gmail.com',
+    'host' => 'smtp.mandrillapp.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => 'nancybrownus8@gmail.com',
-        'name' => 'Magnet Application',
+        'address' => 'support@lfdmypick.com',
+        'name' => 'Magnet JCS Application',
     ],
 
     /*
@@ -84,9 +84,9 @@ return [
     |
     */
 
-    'username' => 'nancybrownus8@gmail.com',
+    'username' => 'Lean Frog Digital, LLC',
 
-    'password' => 'Test@7600',
+    'password' => 'jWalwyUXFLV6UO3QdeO2Gw',
 
     /*
     |--------------------------------------------------------------------------
@@ -117,6 +117,14 @@ return [
 
         'paths' => [
             resource_path('views/vendor/mail'),
+        ],
+    ],
+
+    'stream' => [
+        'ssl' => [
+            'allow_self_signed' => true,
+            'verify_peer' => false,
+            'verify_peer_name' => false,
         ],
     ],
 

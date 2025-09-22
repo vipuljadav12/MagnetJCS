@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')Process Waitlist | {{config('APP_NAME',env("APP_NAME"))}} @endsection
+@section('title')Process Waitlist | {{config('app.name',env("APP_NAME"))}} @endsection
 @section('content')
 <style type="text/css">
     .buttons-excel{display: none !important;}

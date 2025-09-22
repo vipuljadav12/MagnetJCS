@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')Preliminary Selection | {{config('APP_NAME',env("APP_NAME"))}} @endsection
+@section('title')Preliminary Selection | {{config('app.name',env("APP_NAME"))}} @endsection
 @section('content')
 <style type="text/css">
     .font-18{font-size: 18px !important;}

@@ -1,6 +1,6 @@
 @extends("layouts.admin.app")
 @section("title")
-    Import Rising Composition | {{config('APP_NAME',env("APP_NAME"))}}
+    Import Rising Composition | {{config('app.name',env("APP_NAME"))}}
 @endsection
 @section('styles')
     <style type="text/css">

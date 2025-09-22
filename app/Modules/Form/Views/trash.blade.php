@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @section('title')
-	Trash Form | {{config('APP_NAME',env("APP_NAME"))}}
+	Trash Form | {{config('app.name',env("APP_NAME"))}}
 @endsection
 @section('content')	
 	<div class="card shadow">

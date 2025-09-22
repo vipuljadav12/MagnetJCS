@@ -1,6 +1,6 @@
 @extends("layouts.admin.app")
 @section('title')
-	Add Prerequisite  | {{config('APP_NAME',env("APP_NAME"))}}
+	Add Prerequisite  | {{config('app.name',env("APP_NAME"))}}
 @endsection
 @section('styles')
 <link rel="stylesheet" type="text/css" href="{{url('resources/assets/admin/css/select2.css')}}">

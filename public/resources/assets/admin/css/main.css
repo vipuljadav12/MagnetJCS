@@ -29642,7 +29642,8 @@ footer {
     left: 0; }
   @media screen and (min-width: 1200px) {
     footer {
-      margin-left: 260px; } }
+      /* margin-left: 260px; } */
+     }
   footer .footer-box {
     text-align: center; }
 

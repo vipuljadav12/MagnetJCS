@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')Selection Prerequisite  | {{config('APP_NAME',env("APP_NAME"))}}  @endsection
+@section('title')Selection Prerequisite  | {{config('app.name',env("APP_NAME"))}}  @endsection
 @section('content')
     <div class="card shadow">
         <div class="card-body d-flex align-items-center justify-content-between flex-wrap">

@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @section('title')
-Edit Form | {{config('APP_NAME',env("APP_NAME"))}}
+Edit Form | {{config('app.name',env("APP_NAME"))}}
 @endsection
 @section('content')
 <link rel="stylesheet" href="{{url('/resources/assets/admin/css/jquery-ui.css')}}">

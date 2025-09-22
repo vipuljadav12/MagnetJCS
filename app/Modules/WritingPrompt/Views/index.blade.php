@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')WritingPrompt | {{config('APP_NAME',env("APP_NAME"))}} @endsection
+@section('title')WritingPrompt | {{config('app.name',env("APP_NAME"))}} @endsection
 @section('styles')
 <style type="text/css">
     .error { color: red; }

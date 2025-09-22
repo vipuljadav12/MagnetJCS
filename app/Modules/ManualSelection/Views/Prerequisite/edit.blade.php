@@ -1,6 +1,6 @@
 @extends("layouts.admin.app")
 @section('title')
-	Edit Prerequisite | {{config('APP_NAME',env("APP_NAME"))}}
+	Edit Prerequisite | {{config('app.name',env("APP_NAME"))}}
 @endsection
 @section('styles')
 <style type="text/css">

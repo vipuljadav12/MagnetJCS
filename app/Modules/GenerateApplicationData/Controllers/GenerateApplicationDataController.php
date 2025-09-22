@@ -84,7 +84,7 @@ class GenerateApplicationDataController extends Controller
 
     public function generateData(Request $request)
     {
-        //return $request;
+        set_time_limit(300);
         $first_program_id = $request['first_program'];
         $second_program_id = $request['second_program'];
         $enrollment_id = $request['enrollment'];

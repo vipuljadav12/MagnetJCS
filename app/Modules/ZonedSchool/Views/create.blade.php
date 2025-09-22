@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')Add Zone Address | {{config('APP_NAME',env("APP_NAME"))}} @endsection
+@section('title')Add Zone Address | {{config('app.name',env("APP_NAME"))}} @endsection
 @section('content')
    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.css">
 

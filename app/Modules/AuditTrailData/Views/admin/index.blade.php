@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @section('title')
-    Audit Trails | {{ config('APP_NAME', env('APP_NAME')) }}
+    Audit Trails | {{ config('app.name', env('APP_NAME')) }}
 @endsection
 @section('styles')
     <!-- DataTables -->

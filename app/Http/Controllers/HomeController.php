@@ -25,8 +25,11 @@ use App\Traits\AuditTrail;
 use App\IncorrectStudentBDay;
 use App\StudentData;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -102,6 +105,14 @@ class HomeController extends Controller
                 $district = District::where("id", Session::get("district_id"))->first();
                 $application_data = $applications[0];
                 Session::put("enrollment_id", $applications[0]->enrollment_id);
+                Session::put("application_id", $applications[0]->id);
+
+                // Check enrollment period before redirecting to application
+                $enrollment_validation = $this->validateEnrollmentPeriod();
+                if (!$enrollment_validation['valid']) {
+                    $msg_type = "after_application_open_text";
+                    return view('layouts.errors.msgs', compact("district", "msg_type", "application_data"));
+                }
 
                 if (count($applications) == 1 && getConfig()['returning_form_display'] == "No") {
                     return redirect('/application/' . $applications[0]->id);
@@ -205,6 +216,14 @@ class HomeController extends Controller
 
 
             if (!empty($application_data)) {
+                // First check enrollment period dates
+                Session::put("enrollment_id", $application_data->enrollment_id);
+                Session::put("application_id", $application_data->id);
+                $enrollment_validation = $this->validateEnrollmentPeriod();
+                if (!$enrollment_validation['valid']) {
+                    return redirect('/')->with('error', $enrollment_validation['message']);
+                }
+
                 if ((strtotime($application_data->starting_date)  <= strtotime(date("Y-m-d H:i:s")) &&  strtotime($application_data->ending_date) >  strtotime(date("Y-m-d H:i:s"))) || (strtotime($application_data->admin_starting_date)  <= strtotime(date("Y-m-d H:i:s")) &&  strtotime($application_data->admin_ending_date) >  strtotime(date("Y-m-d H:i:s")) && Session::has("from_admin"))) {
                     $district = District::where("id", Session::get("district_id"))->first();
                     Session::put("enrollment_id", $application_data->enrollment_id);
@@ -633,7 +652,16 @@ class HomeController extends Controller
 
     public function submit_form($form_id, $form_type)
     {
-        $dupicate_submission = array(); //$this->find_duplicate_submission($form_id);
+        // Validate enrollment period dates first
+        $enrollment_validation = $this->validateEnrollmentPeriod();
+        if (!$enrollment_validation['valid']) {
+            $this->destroySessions();
+            $msg_type = "enrollment_period_error";
+            $enrollment_error_message = $enrollment_validation['message'];
+            return view('layouts.errors.msgs', compact("msg_type", "enrollment_error_message"));
+        }
+
+        $dupicate_submission = $this->find_duplicate_submission($form_id);
         $district = District::where("id", Session::get("district_id"))->first();
         if (count($dupicate_submission) > 0) {
             $this->destroySessions();
@@ -2220,5 +2248,162 @@ class HomeController extends Controller
         //return $data;
         $rs = ReturningStudentSubmissions::create($data);
         return redirect('/msgs/returnthankyou');
+    }
+
+
+    public function validateEnrollmentPeriod()
+    {
+        $enrollment_id = Session::get("enrollment_id");
+        $application_id = Session::get("application_id");
+        if (empty($enrollment_id)) {
+            return [
+                'valid' => false,
+                'message' => 'Enrollment period not found.'
+            ];
+        }
+        $enrollment = Enrollment::where('id', $enrollment_id)->first();
+        if (empty($enrollment)) {
+            return [
+                'valid' => false,
+                'message' => 'Enrollment period not found.'
+            ];
+        }
+        $current_date = date("Y-m-d H:i:s");
+        $enrollment_beginning_date = $enrollment->begning_date . " 00:00:00";
+        $enrollment_ending_date = $enrollment->ending_date . " 23:59:59";
+
+        if (strtotime($current_date) < strtotime($enrollment_beginning_date)) {
+            return [
+                'valid' => false,
+                'message' => 'Enrollment period has not started yet.'
+            ];
+        }
+
+        if (strtotime($current_date) > strtotime($enrollment_ending_date)) {
+            return [
+                'valid' => false,
+                'message' => 'Enrollment period has ended.'
+            ];
+        }
+        $application = null;
+        if (!empty($application_id)) {
+            $application = Application::where('id', $application_id)->first();
+        }
+
+        if (!empty($application)) {
+            if (Session::has("from_admin")) {
+                $app_beginning_date = $application->admin_starting_date;
+                $app_ending_date = $application->admin_ending_date;
+            } else {
+                $app_beginning_date = $application->starting_date;
+                $app_ending_date = $application->ending_date;
+            }
+            if (!empty($app_beginning_date) && !empty($app_ending_date)) {
+                $app_beginning_date = date("Y-m-d H:i:s", strtotime($app_beginning_date));
+                $app_ending_date = date("Y-m-d H:i:s", strtotime($app_ending_date));
+                if (strtotime($current_date) < strtotime($app_beginning_date)) {
+                    return [
+                        'valid' => false,
+                        'message' => 'Application submission period has not started yet.'
+                    ];
+                }
+                if (strtotime($current_date) > strtotime($app_ending_date)) {
+                    return [
+                        'valid' => false,
+                        'message' => 'Application submission period has ended.'
+                    ];
+                }
+            }
+        }
+        return [
+            'valid' => true,
+            'message' => 'Enrollment period is active.'
+        ];
+    }
+
+    public function sendWhatsAppMessage($submission_data, $emailArr)
+    {
+        try {
+            $twilioSid = config('variables.twilio.sid');
+            $twilioToken = config('variables.twilio.token');
+            $twilioWhatsAppNumber = config('variables.twilio.whatsapp_number');
+
+            if (!$twilioSid || !$twilioToken || !$twilioWhatsAppNumber) {
+                Log::warning('Twilio credentials not configured. Skipping WhatsApp message.');
+                return;
+            }
+            if (empty($submission_data->phone_number)) {
+                Log::warning('No phone number found for submission ID: ' . $submission_data->id);
+                return;
+            }
+            // Format phone number for WhatsApp (ensure it starts with country code)
+            $phoneNumber = $this->formatPhoneNumber($submission_data->phone_number);
+            $message = $this->createWhatsAppMessage($emailArr);
+
+            $url = "https://api.twilio.com/2010-04-01/Accounts/{$twilioSid}/Messages.json";
+            $response = Http::withBasicAuth($twilioSid, $twilioToken)
+                ->withOptions(['verify' => base_path('resources/certs/cacert.pem')])
+                ->asForm()
+                ->post($url, [
+                    'To' => "whatsapp:" . $phoneNumber,
+                    'From' => $twilioWhatsAppNumber,
+                    'Body' => strip_tags($message)
+                ]);
+
+            if ($response->successful()) {
+                $twilioMessage = $response->json();
+            } else {
+                throw new Exception('Twilio API request failed: ' . $response->body());
+            }
+        } catch (Exception $e) {
+            Log::error('Failed to send WhatsApp message', [
+                'submission_id' => $submission_data->id ?? 'unknown',
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+    }
+
+    public function formatPhoneNumber($phoneNumber)
+    {
+        $cleanNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+        if (strlen($cleanNumber) == 10) {
+            $cleanNumber = '1' . $cleanNumber;
+        }
+        return '+' . $cleanNumber;
+    }
+
+    public function createWhatsAppMessage($emailArr)
+    {
+        $selected_language = Session::get('default_language', 'english');
+        if ($selected_language == 'spanish') {
+            $message = "🎓 *Confirmación de Solicitud*\n\n";
+            $message .= "Estimado/a {$emailArr['parent_name']},\n\n";
+            $message .= "¡Su solicitud para *{$emailArr['student_name']}* ha sido enviada exitosamente!\n\n";
+            $message .= "📋 *Número de Confirmación:* {$emailArr['confirm_number']}\n";
+            $message .= "📅 *Fecha de Envío:* {$emailArr['submission_date']}\n";
+            $message .= "🎯 *Grado Solicitado:* {$emailArr['next_grade']}\n\n";
+
+            if (!empty($emailArr['transcript_due_date'])) {
+                $message .= "📝 *Importante:* Fecha límite para transcripciones: {$emailArr['transcript_due_date']}\n\n";
+            }
+            $message .= "Recibirá un correo electrónico de confirmación detallado en breve.\n\n";
+            $message .= "¡Gracias por su solicitud! 🙏";
+        } else {
+            $message = "🎓 *Application Confirmation*\n\n";
+            $message .= "Dear {$emailArr['parent_name']},\n\n";
+            $message .= "Your application for *{$emailArr['student_name']}* has been successfully submitted!\n\n";
+            $message .= "📋 *Confirmation Number:* {$emailArr['confirm_number']}\n";
+            $message .= "📅 *Submission Date:* {$emailArr['submission_date']}\n";
+            $message .= "🎯 *Grade Applied For:* {$emailArr['next_grade']}\n\n";
+
+            if (!empty($emailArr['transcript_due_date'])) {
+                $message .= "📝 *Important:* Transcript due date: {$emailArr['transcript_due_date']}\n\n";
+            }
+            $message .= "You will receive a detailed confirmation email shortly.\n\n";
+            $message .= "Thank you for your application! 🙏";
+        }
+
+        return $message;
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')Program Master  | {{config('APP_NAME',env("APP_NAME"))}}  @endsection
+@section('title')Program Master  | {{config('app.name',env("APP_NAME"))}}  @endsection
 @section('content')
     <div class="card shadow">
         <div class="card-body d-flex align-items-center justify-content-between flex-wrap">

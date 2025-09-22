@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')Configure Export Submission | {{config('APP_NAME',env("APP_NAME"))}} @endsection
+@section('title')Configure Export Submission | {{config('app.name',env("APP_NAME"))}} @endsection
 
 @section('styles')
 @stop

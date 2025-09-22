@@ -1,6 +1,6 @@
 @extends("layouts.admin.app")
 @section('title')
-Edit School | {{config('APP_NAME',env("APP_NAME"))}}
+Edit School | {{config('app.name',env("APP_NAME"))}}
 @endsection
 @section('content')
 <div class="card shadow">

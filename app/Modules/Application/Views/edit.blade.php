@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @section('title')
-	Edit Application Dates | {{config('APP_NAME',env("APP_NAME"))}}
+	Edit Application Dates | {{config('app.name',env("APP_NAME"))}}
 @endsection
 
 @section('content')
@@ -484,7 +484,7 @@
                     id:$(select).val(),
                 },
                 success: function(response) {
-                    setStartEndDate(response.start,response.end);
+                    // setStartEndDate(response.start,response.end);
                     start_date=response.start;
                     end_date=response.end;
                     admin_start_date=response.start;

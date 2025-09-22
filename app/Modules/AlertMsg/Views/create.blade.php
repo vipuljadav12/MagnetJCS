@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @section('title')
-    Add Text | {{ config('APP_NAME', env('APP_NAME')) }}
+    Add Text | {{ config('app.name', env('APP_NAME')) }}
 @endsection
 @section('content')
     <div class="card shadow">

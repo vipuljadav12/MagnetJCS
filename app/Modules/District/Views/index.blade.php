@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 @section('title')
-    District | {{ config('APP_NAME', env('APP_NAME')) }}
+    District | {{ config('app.name', env('APP_NAME')) }}
 @endsection
 @section('styles')
     <!-- DataTables -->

@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title')Edit Communication | {{config('APP_NAME',env("APP_NAME"))}} @endsection
+@section('title')Edit Communication | {{config('app.name',env("APP_NAME"))}} @endsection
 @section('styles')
     
 @endsection

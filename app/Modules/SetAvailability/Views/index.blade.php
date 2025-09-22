@@ -1,6 +1,6 @@
 @extends("layouts.admin.app")
 @section("title")
-	Set Availability | {{config('APP_NAME',env("APP_NAME"))}}
+	Set Availability | {{config('app.name',env("APP_NAME"))}}
 @endsection
 @section("content")
 <div class="content-wrapper-in">
