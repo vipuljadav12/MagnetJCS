@@ -1,0 +1,17 @@
+.nav{border-radius:.25rem;
+	&.wrap-border {border: 1px solid $l-ctc;
+		li{
+			&.nav-header {margin:0.5rem 1rem;}
+			a {
+				&.nav-link {color:$secondary; padding:0.5rem 1rem;}
+				&.disabled {color:$muted !important;}
+			}			
+		}
+	}
+	.nav-item {
+		.nav-link {color:$secondary;
+			&.disabled {color:$muted !important;}
+			&.active {color:$primary !important;}
+		}		
+	}
+}

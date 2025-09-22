@@ -1,0 +1,274 @@
+/* Scss Document */
+
+// Grid breakpoints
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+$breakpoint-xs: 320px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+
+@mixin respond($breakpoint) {
+	@if($breakpoint == "phone") { 
+		@media only screen and (max-width: 575px) { @content; } 
+    }
+    @if($breakpoint == "phone-land") {
+        @media only screen and (max-width: 767px) { @content; }
+    }
+	@if($breakpoint == "tab-port") {
+		@media only screen and (max-width: 991px) { @content; } 
+	}
+	@if($breakpoint == "tab-land") {
+		@media only screen and (max-width: 1199px) { @content; } 
+    }
+    @if ($breakpoint == "desktop") {
+        @media only screen and (min-width: 1200px) { @content; }
+    }
+	@if($breakpoint == "big-desktop") {
+		@media only screen and (min-width: 1800px) { @content; } 
+	}
+}
+
+
+@mixin screen($size, $type: min, $pixels: $breakpoint-xs) {
+	@if $size == 'xs' {
+		@media screen and ($type + -width: $breakpoint-xs) {
+			@content;
+		}
+	}
+	@else if $size == 'sm' {
+		@media screen and ($type + -width: $breakpoint-sm) {
+			@content;
+		}
+	}
+	@else if $size == 'md' {
+		@media screen and ($type + -width: $breakpoint-md) {
+			@content;
+		}
+	}
+	@else if $size == 'lg' {
+		@media screen and ($type + -width: $breakpoint-lg) {
+			@content;
+		}
+	}
+	@else if $size == 'xl' {
+		@media screen and ($type + -width: $breakpoint-xl) {
+			@content;
+		}
+	}
+	@else if $size == 'custom' {
+		@media screen and ($type + -width: $pixels + px) {
+			@content;
+		}
+	}
+	@else {
+		@content;
+	}
+}
+
+/*-- Font Weight --*/
+@each $fweight in 100, 200, 300, 400, 500, 600, 700, 800, 900 {
+	.b-#{$fweight} {
+    	font-weight: #{$fweight};
+  	}
+}
+@mixin b($fweight) {font-weight: 1 * $fweight;}
+
+/*-- Font Size --*/
+$f: 10;
+@while $f <= 60 {
+	.font-#{$f} {
+		font-size: 1px * $f;
+	}
+	$f: $f + 2;
+}
+@mixin font($ff) {font-size: 1px * $ff;}
+
+///*-- Line Height --*/
+@mixin lineheight($f) {line-height: 1px * $f;}
+
+/*-- Margin and Padding --*/
+$i: 0;  
+@while $i < 100 {
+	.m-#{$i} {margin: 1px * $i !important;}
+  	.mt-#{$i} {margin-top: 1px * $i !important;}
+	.mb-#{$i} {margin-bottom: 1px * $i !important;}
+	.ml-#{$i} {margin-left: 1px * $i !important;}
+	.mr-#{$i} {margin-right: 1px * $i !important;}
+
+	.p-#{$i} {padding: 1px * $i !important;}
+  	.pt-#{$i} {padding-top: 1px * $i !important;}
+	.pb-#{$i} {padding-bottom: 1px * $i !important;}
+	.pl-#{$i} {padding-left: 1px * $i !important;}
+	.pr-#{$i} {padding-right: 1px * $i !important;}
+	
+	@include screen(sm) {
+		.m-sm-#{$i} {margin: 1px * $i !important;}
+		.mt-sm-#{$i} {margin-top: 1px * $i !important;}
+		.mb-sm-#{$i} {margin-bottom: 1px * $i !important;}
+		.ml-sm-#{$i} {margin-left: 1px * $i !important;}
+		.mr-sm-#{$i} {margin-right: 1px * $i !important;}
+		
+		.p-sm-#{$i} {padding: 1px * $i !important;}
+		.pt-sm-#{$i} {padding-top: 1px * $i !important;}
+		.pb-sm-#{$i} {padding-bottom: 1px * $i !important;}
+		.pl-sm-#{$i} {padding-left: 1px * $i !important;}
+		.pr-sm-#{$i} {padding-right: 1px * $i !important;}
+	}
+	@include screen(md) {
+		.m-md-#{$i} {margin: 1px * $i !important;}
+		.mt-md-#{$i} {margin-top: 1px * $i !important;}
+		.mb-md-#{$i} {margin-bottom: 1px * $i !important;}
+		.ml-md-#{$i} {margin-left: 1px * $i !important;}
+		.mr-md-#{$i} {margin-right: 1px * $i !important;}
+		
+		.p-md-#{$i} {padding: 1px * $i !important;}
+		.pt-md-#{$i} {padding-top: 1px * $i !important;}
+		.pb-md-#{$i} {padding-bottom: 1px * $i !important;}
+		.pl-md-#{$i} {padding-left: 1px * $i !important;}
+		.pr-md-#{$i} {padding-right: 1px * $i !important;}
+	}
+	@include screen(lg) {
+		.m-lg-#{$i} {margin: 1px * $i !important;}
+		.mt-lg-#{$i} {margin-top: 1px * $i !important;}
+		.mb-lg-#{$i} {margin-bottom: 1px * $i !important;}
+		.ml-lg-#{$i} {margin-left: 1px * $i !important;}
+		.mr-lg-#{$i} {margin-right: 1px * $i !important;}
+		
+		.p-lg-#{$i} {padding: 1px * $i !important;}
+		.pt-lg-#{$i} {padding-top: 1px * $i !important;}
+		.pb-lg-#{$i} {padding-bottom: 1px * $i !important;}
+		.pl-lg-#{$i} {padding-left: 1px * $i !important;}
+		.pr-lg-#{$i} {padding-right: 1px * $i !important;}
+	}
+	@include screen(xl) {
+		.m-xl-#{$i} {margin: 1px * $i !important;}
+		.mt-xl-#{$i} {margin-top: 1px * $i !important;}
+		.mb-xl-#{$i} {margin-bottom: 1px * $i !important;}
+		.ml-xl-#{$i} {margin-left: 1px * $i !important;}
+		.mr-xl-#{$i} {margin-right: 1px * $i !important;}
+		
+		.p-xl-#{$i} {padding: 1px * $i !important;}
+		.pt-xl-#{$i} {padding-top: 1px * $i !important;}
+		.pb-xl-#{$i} {padding-bottom: 1px * $i !important;}
+		.pl-xl-#{$i} {padding-left: 1px * $i !important;}
+		.pr-xl-#{$i} {padding-right: 1px * $i !important;}
+	}
+  	$i: $i + 10;
+}
+/*-- Margin and Padding --*/
+$i: 0;  
+@while $i < 10 {
+	.m-#{$i} {margin: 1px * $i !important;}
+  	.mt-#{$i} {margin-top: 1px * $i !important;}
+	.mb-#{$i} {margin-bottom: 1px * $i !important;}
+	.ml-#{$i} {margin-left: 1px * $i !important;}
+	.mr-#{$i} {margin-right: 1px * $i !important;}
+
+	.p-#{$i} {padding: 1px * $i !important;}
+  	.pt-#{$i} {padding-top: 1px * $i !important;}
+	.pb-#{$i} {padding-bottom: 1px * $i !important;}
+	.pl-#{$i} {padding-left: 1px * $i !important;}
+	.pr-#{$i} {padding-right: 1px * $i !important;}
+	
+	@include screen(sm) {
+		.mt-sm-#{$i} {margin-top: 1px * $i !important;}
+		.mb-sm-#{$i} {margin-bottom: 1px * $i !important;}
+		.ml-sm-#{$i} {margin-left: 1px * $i !important;}
+		.mr-sm-#{$i} {margin-right: 1px * $i !important;}
+		
+		.pt-sm-#{$i} {padding-top: 1px * $i !important;}
+		.pb-sm-#{$i} {padding-bottom: 1px * $i !important;}
+		.pl-sm-#{$i} {padding-left: 1px * $i !important;}
+		.pr-sm-#{$i} {padding-right: 1px * $i !important;}
+	}
+	@include screen(md) {
+		.mt-md-#{$i} {margin-top: 1px * $i !important;}
+		.mb-md-#{$i} {margin-bottom: 1px * $i !important;}
+		.ml-md-#{$i} {margin-left: 1px * $i !important;}
+		.mr-md-#{$i} {margin-right: 1px * $i !important;}
+		
+		.pt-md-#{$i} {padding-top: 1px * $i !important;}
+		.pb-md-#{$i} {padding-bottom: 1px * $i !important;}
+		.pl-md-#{$i} {padding-left: 1px * $i !important;}
+		.pr-md-#{$i} {padding-right: 1px * $i !important;}
+	}
+	@include screen(lg) {
+		.mt-lg-#{$i} {margin-top: 1px * $i !important;}
+		.mb-lg-#{$i} {margin-bottom: 1px * $i !important;}
+		.ml-lg-#{$i} {margin-left: 1px * $i !important;}
+		.mr-lg-#{$i} {margin-right: 1px * $i !important;}
+		
+		.pt-lg-#{$i} {padding-top: 1px * $i !important;}
+		.pb-lg-#{$i} {padding-bottom: 1px * $i !important;}
+		.pl-lg-#{$i} {padding-left: 1px * $i !important;}
+		.pr-lg-#{$i} {padding-right: 1px * $i !important;}
+	}
+	@include screen(xl) {
+		.mt-xl-#{$i} {margin-top: 1px * $i !important;}
+		.mb-xl-#{$i} {margin-bottom: 1px * $i !important;}
+		.ml-xl-#{$i} {margin-left: 1px * $i !important;}
+		.mr-xl-#{$i} {margin-right: 1px * $i !important;}
+		
+		.pt-xl-#{$i} {padding-top: 1px * $i !important;}
+		.pb-xl-#{$i} {padding-bottom: 1px * $i !important;}
+		.pl-xl-#{$i} {padding-left: 1px * $i !important;}
+		.pr-xl-#{$i} {padding-right: 1px * $i !important;}
+	}
+  	$i: $i + 5;
+}
+
+
+///*-- Position --*/
+@mixin center($position) {
+	position: absolute;
+
+	@if $position == 'vertical' {
+		top: 50%;
+		-webkit-transform: translateY(-50%);
+		-ms-transform: translateY(-50%);
+		transform: translateY(-50%);
+	}
+	@else if $position == 'horizontal' {
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		-ms-transform: translateX(-50%);
+		transform: translate(-50%);
+	}
+	@else if $position == 'both' {
+		top: 50%;
+		left: 50%;
+		-webkit-transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		transform: translate(-50%, -50%);
+	}
+}
+///*-- Font Face --*/
+@mixin font-face($font-name, $file-name, $weight: normal, $style: normal) { 
+	@font-face {
+		font-family: quote($font-name);
+		src: url('../fonts/'+ $file-name + '.eot');
+		src: url('../fonts/'+ $file-name + '.eot?#iefix')  format('embedded-opentype'),
+			 url('../fonts/'+ $file-name + '.woff') format('woff'),
+			 url('../fonts/'+ $file-name + '.ttf')  format('truetype'),
+			 url('../fonts/'+ $file-name + '.svg##{$font-name}')  format('svg');
+		font-weight: $weight;
+		font-style: $style;
+	}
+}
+///*-- Color Theme --*/
+@mixin theme($themename, $primarycolor, $secondarycolor) {
+	$primary: $primarycolor;
+	$secondary: $secondarycolor;
+	
+	.#{$themename} {
+		.btn-primary {
+	  		background: $primary;
+		}
+		.btn-secondary {
+	  		background: $secondary;
+		}
+	}
+}

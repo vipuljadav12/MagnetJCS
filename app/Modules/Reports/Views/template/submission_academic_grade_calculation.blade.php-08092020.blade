@@ -1,0 +1,244 @@
+    @php 
+        $exist_data = getSubmissionGradeCalculationData($submission->id);
+
+        if(empty($exist_data))
+        {
+            $academic_grade = false;
+            $completed_subjects = array();
+            $subjectTotal = array();
+
+            foreach($eligibilities as $elg=>$elgval)
+            {
+                if($elgval->eligibility_ype == "Academic Grades")
+                {
+                    $academic_grade = true;
+                    $eligibility_data = getEligibilityContent1($elgval->assigned_eigibility_name);
+
+
+                    $tmpdata = array();
+                    $count = 0;
+                    $academic_years = array();
+                    for($i=1; $i <= $eligibility_data->terms_pulled[0]; $i++)
+                    {
+                        $completed_data = array();
+                        $term = (date("Y")-$i)."-".(date("y")-($i-1));
+                        $fterm = (date("Y")-$i)."-".(date("Y")-($i-1));
+                        $data = getStudentGradeDataYear($submission->student_id,  (date("Y")-$i)."-".(date("y")-($i-1)), (date("Y")-$i)."-".(date("Y")-($i-1)),$eligibility_data->subjects);
+
+                        foreach($data['data'] as $ekey=>$evalue)
+                        {
+                            if(in_array($evalue->courseType, Config::get('variables.courses')))
+                            {
+                                $tmpdata[$count]['stateID'] = $evalue->stateID;
+                                $tmpdata[$count]['academicYear'] = $term;
+                                $tmpdata[$count]['sAcademicYear'] = $fterm;
+                                $tmpdata[$count]['academicTerm'] = $evalue->academicTerm;
+                                $tmpdata[$count]['courseTypeID'] = $evalue->courseTypeID;
+                                $tmpdata[$count]['courseType'] = $evalue->courseType;
+                                $tmpdata[$count]['courseName'] = $evalue->courseName;
+                                $tmpdata[$count]['sectionNumber'] = $evalue->sectionNumber;
+                                $tmpdata[$count]['numericGrade'] = $evalue->numericGrade;
+                                $count++;
+                                //$completed_data[] = $evalue->courseTypeID;
+                            }
+                        }
+               
+                    }
+
+
+                    
+                    foreach($tmpdata as $ekey=>$evalue)
+                    {   
+                        if(!in_array($evalue['courseType'], $completed_subjects))
+                        {
+                            $total = $count = 0;
+                            foreach($tmpdata as $inkey=>$invalue)
+                            {
+                                if($evalue['courseType'] == $invalue['courseType'])
+                                {
+                                    $total += $invalue['numericGrade'];
+                                    $count++;
+                                }
+                            }
+                            $subjectTotal[$evalue['courseType']] = $total/$count;
+                            $completed_subjects[] = $evalue['courseType'];
+                        }
+                    }
+
+
+                }
+            }
+        }
+        else
+        {
+            $subjectTotal = array();
+        }
+        $eligibility_data = getEligibilityContent1($value->assigned_eigibility_name);
+
+        
+    @endphp
+
+@if(!empty($subjectTotal) || !empty($exist_data))
+<form class="form" id="#insterview_score_form" method="post" action="{{url('admin/Submissions/update/AcademicGradeCalculation/'.$submission->id)}}">
+        {{csrf_field()}}
+        @if(empty($exist_data))
+            <input type="hidden" name="scoring_type" value="{{$eligibility_data->scoring->type}}">
+            <input type="hidden" name="submission" value="new">
+        @else
+            <input type="hidden" name="scoring_type" value="{{$exist_data->scoring_type}}">
+            <input type="hidden" name="submission" value="exist">
+        @endif
+        <div class="card shadow">
+            <div class="card-header">{{$value->eligibility_name}}</div>
+            @if(empty($exist_data))
+                <div class="card-body">
+                    <div class="form-group row">
+                        @if($eligibility_data->scoring->type == "CLSG")
+                            @foreach($subjectTotal as $skey=>$svalue)
+                                <div class="col-3 col-md-3 mt-20">
+                                    <label class="control-label col-12 col-md-12">{{$skey}}</label>
+                                    <div class=" col-12 col-md-12 ">
+                                        <input type="text" class="form-control" value="{{$svalue}}" name="subjects[{{$skey}}]">
+                                    </div>
+
+                                </div>
+                            @endforeach
+                             
+                        @elseif($eligibility_data->scoring->type=="GA")
+                            @php $total = $count = 0 @endphp
+                            @foreach($subjectTotal as $skey=>$svalue)
+                                @php $total += $svalue @endphp
+                                @php $count ++ @endphp
+                            @endforeach
+                            <label class="control-label col-12 col-md-12">Grade Average Score : </label>
+                            <div class=" col-12 col-md-12 ">
+                                <input type="text" class="form-control" value="{{number_format($total/$count, 2)}}" name="GradeAverageScore">
+                            </div>
+                        @elseif($eligibility_data->scoring->type=="GPA")
+                        	@php $total = $count = 0 @endphp
+                            @foreach($subjectTotal as $skey=>$svalue)
+                            	@php $total = $total + findGPA($svalue, $eligibility_data->GPA) @endphp
+                            	@php $count++ @endphp
+                                <div class="col-3 col-md-3 mt-20">
+                                    <label class="control-label col-12 col-md-12">{{$skey}}</label>
+                                    <div class=" col-12 col-md-12 ">
+                                        <input type="text" class="form-control" value="{{findGPA($svalue, $eligibility_data->GPA)}}" name="GPA">
+                                    </div>
+
+                                </div>
+                            @endforeach
+                            <div class="col-3 col-md-3 mt-20">
+                                    <label class="control-label col-12 col-md-12"><strong>Total</strong></label>
+                                    <label class="control-label col-12 col-md-12"><strong>{{number_format($total/$count, 2)}}</strong></label>
+                                    </div>
+
+                                </div>
+                        @endif
+                       
+                        
+                    </div>
+                    @if($eligibility_data->scoring->method != "DD" && $eligibility_data->scoring->method!="")
+                            @if($eligibility_data->scoring->method=="YN")
+                                @php $options = $eligibility_data->scoring->YN;
+                                @endphp
+                            @else
+                                @php $options = $eligibility_data->scoring->NR;
+                                @endphp
+                            @endif 
+                            <div class="form-group row">
+                                <div class=" col-12 col-md-12 pt-20">
+                                    <select class="form-control custom-select template-type" name="score">
+                                        <option value="">Select Option</option>
+                                        @foreach($options as $k=>$v)
+                                            <option @if(isset($data->data) && $data->data == $v) selected="selected" @endif value="{{$v}}">{{$v}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                   <div class="text-right"> 
+                    <button class="btn btn-success">    
+                        <i class="fa fa-save"></i>
+                    </button>
+                </div>
+            </div>
+            @else
+                <div class="card-body">
+                        <div class="form-group row">
+                            @php $subjects = json_decode($exist_data->subjects) @endphp
+                            @if($exist_data->scoring_type == "CLSG")
+                                @foreach($subjects as $skey=>$svalue)
+                                    <div class="col-3 col-md-3 mt-10">
+                                        <label class="control-label col-12 col-md-12">{{$skey}}</label>
+                                        <div class=" col-12 col-md-12 ">
+                                            <input type="text" class="form-control" value="{{$svalue}}" name="subjects[{{$skey}}]">
+                                        </div>
+
+                                    </div>
+                                @endforeach
+                                 
+                            @elseif($exist_data->scoring_type=="GA")
+                                @php $total = $count = 0 @endphp
+                                @foreach($subjectTotal as $skey=>$svalue)
+                                    @php $total += $svalue @endphp
+                                    @php $count ++ @endphp
+                                @endforeach
+                                <label class="control-label col-12 col-md-12">Grade Average Score : </label>
+                                <div class=" col-12 col-md-12 ">
+                                    <input type="text" class="form-control" value="{{number_format($total/$count, 2)}}" name="GradeAverageScore">
+                                </div>
+                            @elseif($exist_data->scoring_type=="GPA")
+                                @php $total = $count = 0 @endphp
+                            	@foreach($subjectTotal as $skey=>$svalue)
+                            		@php $total = $total + findGPA($svalue, $eligibility_data->GPA) @endphp
+                            		@php $count++ @endphp
+                                    <div class="col-3 col-md-3 mt-10">
+                                        <label class="control-label col-12 col-md-12">Total</label>
+                                        <div class=" col-12 col-md-12 ">
+                                            <input type="text" class="form-control" value="{{number_format($total/$count, 2)}}" name="GPA">
+                                        </div>
+
+                                    </div>
+                                @endforeach
+                            @endif
+                           
+                            
+                        </div>
+                        @if($eligibility_data->scoring->method != "DD" && $eligibility_data->scoring->method!="")
+                                @if($eligibility_data->scoring->method=="YN")
+                                    @php $options = $eligibility_data->scoring->YN;
+                                    @endphp
+                                @else
+                                    @php $options = $eligibility_data->scoring->NR;
+                                    @endphp
+                                @endif 
+                                <div class="form-group row">
+                                    <div class=" col-12 col-md-12 pt-20">
+                                        <select class="form-control custom-select template-type" name="score">
+                                            <option value="">Select Option</option>
+                                            @foreach($options as $k=>$v)
+                                                <option @if($exist_data->scoring_type == $v) selected="selected" @endif value="{{$v}}">{{$v}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif
+
+                       <div class="text-right"> 
+                        <button class="btn btn-success">    
+                            <i class="fa fa-save"></i>
+                        </button>
+                    </div>
+                </div>
+            @endif
+        </div>
+</form>
+@else
+    <div class="card shadow">
+        <div class="card-header">{{$value->eligibility_name}}</div>
+        <div class="card-body">
+            <p>Academic Grade Eligibility method is not configured for this program.</p>
+        </div>
+    </div>
+@endif

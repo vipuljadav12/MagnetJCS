@@ -1,0 +1,50 @@
+.recent-order-list-table{ background:$l-ctb;
+	&.table-padded {
+		border-spacing: 0 1rem;
+	}
+}
+.transparent-card {
+	.table {
+		thead {
+			tr {
+				td {color:$l-ctl;}
+			}
+		}
+	}
+}
+.transparent-card {
+	.table {
+		thead {
+			tr {
+				th {
+					color:$l-ctl;
+				}
+			}
+		}
+	}
+}
+table {
+	&.dataTable {
+		tbody {
+			tr, td {background:$white;}
+		}
+		td.table-buttons {
+			i {font-size:1.80rem;}
+		}
+	}
+	.prooption-details {
+		visibility: hidden; opacity: 0; transition: visibility 0s linear 0.33s, opacity 0.33s linear;
+		&.main {visibility: visible; opacity: 1; transition-delay: 0s;}
+	}
+}
+.table {
+	&.align-top {
+		th, td {vertical-align:top !important;}
+	}
+	&.algin-middle {
+		th, td {vertical-align:middle !important;}
+	}
+	&.algin-bottom {
+		th, td {vertical-align:bottom !important;}
+	}
+}

@@ -1,0 +1,38 @@
+/* Shortcodes
+********************/
+.color-primary { color: $color-primary;}
+.color-secondary { color: $color-secondary;}
+.color-tertiary { color: $color-tertiary;}
+.color-black { color: $color-black;}
+.color-white { color: $color-white;}
+.color-gray   { color: $gray;}
+/**/
+
+.bordered { border: 1px solid $border-primary;}
+.bordered-bottom {border-bottom: 1px solid $border-primary;}
+.bordered-top {border-top: 1px solid $border-primary;}
+.bordered-dash {border-top: 2px dashed $border-primary; border-bottom: 2px dashed $border-primary;}
+
+.bg-primary {background-color: $color-primary !important;}
+.bg-secondary {background-color: $color-secondary !important;}
+.bg-tertiary {background-color: $color-tertiary !important;}
+.bg-white {background-color: $color-white !important;}
+.bg-gray {background-color: $gray !important;}
+
+.bg-secondary-light {background-color: lighten($color-secondary,8.5%);}
+
+.bg-gradient-1 {background: linear-gradient(122deg, #dd2476 0%, #e34e41 100%);}
+
+/*Background Positon*/
+.bg-size-cover {background-size: cover;}
+.bg-size-contain {background-size: contain;}
+.bg-pos-center-center {background-position: center !important;}
+.bg-pos-lt {background-position: left top !important;}
+.bg-pos-lc {background-position: left center !important;}
+.bg-pos-lb {background-position: left bottom !important;}
+.bg-pos-rr {background-position: right top !important;}
+.bg-pos-rc {background-position: right center !important;}
+.bg-pos-rb {background-position: right bottom !important;}
+.bg-pos-ct {background-position: center top !important;}
+.bg-pos-cb {background-position: center bottom !important;}
+

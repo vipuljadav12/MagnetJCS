@@ -1,0 +1,58 @@
+@import '../default/variables';
+@import '../default/mixin';
+
+.form-control {
+	@include font(14);
+	border-radius: 0px;
+	border: 1px solid $border-primary;
+	padding: 0.375rem 0.55rem;
+	z-index: 1;
+	&:focus {
+		z-index: 1;
+		box-shadow: none !important;
+		border: 1px solid $border-primary;
+	}
+}
+.custom-select {
+	-o-appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	padding: 0.25rem 1.75rem 0.25rem 0.5rem;
+}
+.radio-list {
+	.custom-radio {
+		margin-right: 20px;
+		min-width: 80px;
+	}
+}
+.input-group-text {
+	font-size: $font-default;
+	padding: 0.375rem 0.55rem;
+	border-radius: 0px;
+}
+// switches
+//
+// Tweak a few things for switches
+
+.custom-switch {
+	//padding-left: $custom-switch-width + $custom-control-gutter;
+
+		.custom-control-label {
+		&::after {
+			background-color: $danger;
+		}
+	}
+
+	.custom-control-input:checked ~ .custom-control-label {
+		&::after {
+	  		background-color: $success;
+		}
+	}
+
+	.custom-control-input:disabled {
+		&:checked ~ .custom-control-label::before {
+	  		background-color: $success;
+		}
+	}
+}

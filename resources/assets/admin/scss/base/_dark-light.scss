@@ -1,0 +1,165 @@
+@import 'typography';
+.dark-theme {
+ 		&[datasidebar-bg="default"],
+		&[datasidebar-bg="theme01"],
+		&[datasidebar-bg="theme02"],
+		&[datasidebar-bg="theme03"],
+		&[datasidebar-bg="theme04"],
+		&[datasidebar-bg="theme05"]{
+			#sidebar-menu {
+				ul {
+					ul.nav-third-level {
+						box-shadow: 0 0 5px 0px rgba(255,255,255,0.3);
+					}
+				}
+			}
+		}
+		
+		
+	}
+}
+.light-theme {
+	.side-menu {
+		&[datasidebar-bg="default"],
+		&[datasidebar-bg="theme01"],
+		&[datasidebar-bg="theme02"],
+		&[datasidebar-bg="theme03"],
+		&[datasidebar-bg="theme04"],
+		&[datasidebar-bg="theme05"]{
+			background: $color-white;
+			box-shadow: -2px 0 10px 0px $black;
+		
+			#sidebar-menu {
+				ul {
+					li {
+						a {
+							color: $black;
+							&:hover, &:focus {
+								color: $color-white;
+							}
+						}
+						&.active {
+							& > a {
+								color: $color-white;
+							}
+							ul.nav-second-level {
+								li {
+									a {
+										color: $black;
+									}
+									&:hover,&:focus,&.active {
+										& > a {
+											color: $color-white;
+										}
+									}
+								}
+							}
+							
+						}
+						ul.nav-second-level {
+							li {
+								a {
+									color: $black;
+									
+								}
+								&:hover, &:focus {
+									& > a {
+										color: $color-white;
+									}
+								}
+								ul.nav-thrid-level {
+									li {
+										a {
+											color: $black;
+										}
+										&:hover, &:focus {
+											& > a {
+												color: $color-white;
+											}
+										}
+									}
+								}
+							}
+						}
+						
+					}
+					
+				}
+			}
+		}
+		
+		
+		
+		
+	}
+}
+.enlarged {
+	&.dark-theme {
+		.side-menu {
+			.logo-box {
+				.logo-light {
+					display: none;
+				}				
+				.logo-light-small {
+					display: none;
+				}
+				.logo-dark {
+					display: none;
+				}
+				.logo-dark-small {
+					display: inline-block;
+				}
+			}
+		}
+	}
+	
+	&.light-theme {
+		.side-menu {
+			&.left.small {
+				&[datasidebar-bg="default"],
+				&[datasidebar-bg="theme01"],
+				&[datasidebar-bg="theme02"],
+				&[datasidebar-bg="theme03"],
+				&[datasidebar-bg="theme04"],
+				&[datasidebar-bg="theme05"]{
+					background: $color-white;
+					#sidebar-menu {
+						ul {
+							li {
+								a {
+									background: transparent;
+								}
+								ul.nav-second-level {
+									li {
+										a {
+											color: $color-white;
+										}
+									}
+									
+								}								
+							}
+							ul.nav-third-level {
+								box-shadow: 0 0 5px 0px rgba(255,255,255,0.3);
+							}
+						}
+					}
+				}
+			}
+			
+			.logo-box {
+				.logo-dark {
+					display: none;
+				}
+				.logo-dark-small {
+					display: none;
+				}
+				.logo-light {
+					display: none;
+				}
+				.logo-light-small {
+					display: inline-block;
+				}
+			}
+		}
+	}
+}

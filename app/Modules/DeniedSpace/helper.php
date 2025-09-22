@@ -1,0 +1,5 @@
+<?php
+
+/**
+ *	Eligibility Helper  
+ */

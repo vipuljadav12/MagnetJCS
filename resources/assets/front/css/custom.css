@@ -1,0 +1,6 @@
+.top_link {text-align: center; display: -webkit-box; display: -ms-flexbox; display: flex;}
+.top_links_1 > div {display: inline-block; text-align: center; margin-bottom: 20px; -webkit-box-flex: 0; -ms-flex: 0 0 100%; flex: 0 0 100%; max-width: 100%;}    
+ .top_links_2 > div {display: inline-block; text-align: center; margin-bottom: 20px; -webkit-box-flex: 0; -ms-flex: 0 0 50%; flex: 0 0 50%; max-width: 50%;}  
+.top_links_3 > div {display: inline-block; text-align: center; margin-bottom: 20px; -webkit-box-flex: 0; -ms-flex: 0 0 32%; flex: 0 0 32%; max-width: 32%;}    
+.top_links_4 > div {display: inline-block; text-align: center; margin-bottom: 20px; -webkit-box-flex: 0; -ms-flex: 0 0 25%; flex: 0 0 25%; max-width: 25%;}
+.top_links_5 > div {display: inline-block; text-align: center; margin-bottom: 20px; -webkit-box-flex: 0; -ms-flex: 0 0 20%; flex: 0 0 20%; max-width: 20%;}

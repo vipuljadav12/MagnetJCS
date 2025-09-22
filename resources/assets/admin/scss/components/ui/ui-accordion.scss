@@ -1,0 +1,79 @@
+ // Variable.scss
+.accordion{
+    .card{margin-bottom: .7rem;
+		.card-header{cursor: pointer; background: $white; color: $l-ctd!important;}
+	}
+}
+// #accordion-one, 
+#accordion-one, .default-accordion-style {
+	.fa{float: right;}
+    [data-toggle="collapse"]  {
+		.fa{
+			&:before {content: "\f068";}
+		}
+		&.collapsed {
+			.fa{
+				&:before {content: "\f067";}
+			}
+		}
+	}
+    .card{box-shadow: none !important;border-bottom: 1px solid $iron !important;
+        .card-header{padding: 1.6rem;
+			h5 {font-size: 1.7rem; line-height: 35px;
+                // color: $primary;
+                // &.collapsed{
+                //     color: $dark;
+                // }
+                i{width: 35px; height: 35px; border-radius: 50%; border: 1px solid $iron; font-size: 18px; text-align: center; line-height: 35px; -webkit-text-stroke: 1px white !important;}
+            	&[aria-expanded=true] {color: $primary;}
+			}
+			
+        }
+        &-body{padding: 0 2rem 2rem;
+            p {
+				&:not(:last-child){ margin-bottom: 2.5rem;}
+				&:first-child {margin-top: 0;}
+			}
+        }
+    }    
+}
+
+#accordion-two{
+    .fa{float: right;}
+    [data-toggle="collapse"] {
+		.fa{
+			-webkit-transition: all .5s linear 0s; -moz-transition: all .5s linear 0s; -o-transition: all .5s linear 0s;
+			-webkit-transform: rotate(0); -moz-transform: rotate(0); -ms-transform: rotate(0); -o-transform: rotate(0); transform: rotate(0);			
+			&:before {content: "\f107";}
+		}
+		&.collapsed {
+			.fa {
+				transition: all .5s linear 0s;-webkit-transform: rotate(-180px); -moz-transform: rotate(-180px); -ms-transform: rotate(-180px); -o-transform: rotate(-180px); transform: rotate(-180deg);			
+			}
+		}
+	} 
+}
+
+#accordion-three {
+	.fa {float: right;}
+    [data-toggle="collapse"] {
+		.fa{
+			-webkit-transition: all .3s linear 0s; -moz-transition: all .3s linear 0s; -o-transition: all .3s linear 0s; transition: all .3s linear 0s;
+			-webkit-transform: rotate(0); -moz-transform: rotate(0); -ms-transform: rotate(0); -o-transform: rotate(0); transform: rotate(0);			
+			&:before {content: "\f107";}
+		}
+		&.collapsed {
+			.fa {
+				-webkit-transform: rotate(-90px); -moz-transform: rotate(-90px); -ms-transform: rotate(-90px); -o-transform: rotate(-90px); transform: rotate(-90deg);			
+			}
+		}
+	}    
+}
+
+.card-body {
+	.accordion {
+		.card{
+			&:hover {box-shadow: 2px 3px 10px 0px rgba(119, 119, 119, 0.1);}
+		}
+	}
+}

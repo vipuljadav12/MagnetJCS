@@ -1,0 +1,95 @@
+.enlarged {
+	footer {
+		margin-left: 0;
+		@include screen(xl){
+			margin-left: $leftnav-size-xs;
+		}
+		&[datafooter="sticky"] {
+			left: 0;
+		}
+	}
+}
+footer {
+	&[datafooter="hidden"] {
+		display: none;
+	}
+	&[datafooter="static"] {
+		
+	}
+	&[datafooter="sticky"] {
+		position: fixed;
+		bottom: 0px;
+		right: 0px;
+		left: 0;
+	}
+	margin-left: 0;
+	@include screen(xl){
+		margin-left: $leftnav-size-lg;
+	}
+	padding: 10px;
+	background: $gray-lighter;
+	.footer-box {
+		text-align: center;
+	}
+    -webkit-transition: margin 0.3s;
+    transition: margin 0.3s;
+}
+body {
+	.content-wrapper {
+		#listFoot {
+			position: fixed;
+			width: calc(100%);
+			bottom: 0;
+			right: 0;
+			left: 0 !important;
+			margin: 0px;
+			background: rgba(120, 130, 140, 0.93);
+			padding: 5px;
+			border: 0;
+			border-top: 1px solid $border-primary;
+			border-radius: 0;
+			z-index: 999;
+			-webkit-transition: width 0.3s left 0.3s;;
+			-o-transition: width 0.3s left 0.3s;;
+			transition: width 0.3s left 0.3s;;
+			@include screen(xl) {
+				width: calc(100% - #{$leftnav-size-lg});
+				left: $leftnav-size-lg !important;
+			}
+		}
+	}
+	
+	&.enlarged {
+		.content-wrapper {
+			#listFoot {
+				width: calc(100% - #{$leftnav-size-lg});
+				left: $leftnav-size-lg !important;	
+				@include screen(xl) {
+				width: calc(100% - #{$leftnav-size-xs});
+				left: $leftnav-size-xs !important;	
+				}
+			}
+		}
+	}
+}
+
+
+//@media (max-width: 1199px) {
+//	#main-container #listFoot {
+//		left: 0px !important;
+//		width: 100%;
+//	}
+//}
+//#main-container #listFoot.slide-active {
+//	width: calc(100% - 60px);
+//	left: 60px !important;
+//	-webkit-transition: all 0.3s;
+//	-o-transition: all 0.3s;
+//	transition: all 0.3s;
+//}
+//@media (max-width: 1199px) {
+//	#main-container #listFoot.slide-active {
+//	  left: 0px !important;
+//	  width: 100%;
+//	}
+//}

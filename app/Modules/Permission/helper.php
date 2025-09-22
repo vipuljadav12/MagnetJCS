@@ -1,0 +1,5 @@
+<?php
+
+/**
+ *	Challenges Helper  
+ */

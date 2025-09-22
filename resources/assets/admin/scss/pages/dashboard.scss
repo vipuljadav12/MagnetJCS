@@ -1,0 +1,17 @@
+.box-setup {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	li {
+		display: flex;
+		justify-content: space-between;
+		padding: 10px 20px;
+		border-bottom: 1px solid $border-primary;
+		&:last-child {
+			border-bottom: none;
+		}
+		&:nth-child(2n) {
+			background: $gray-lightest;
+		}
+	}
+}

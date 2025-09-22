@@ -1,0 +1,41 @@
+.max-width-960 {max-width: 960px; margin-left: auto;margin-right: auto;}
+.wrapper-page {height: 100vh;  width: 100%;}
+.overlay-box {
+	.iconpro-link {
+		color: $color-primary;
+		.img-icon {
+			width: 100%;
+			text-align: center;
+			padding: 10px;
+			.board-icon {width: 200px;height: 200px;
+				&.admin-01-icon {background: url("../images/board/board-01.png") center no-repeat;}
+				&.admin-02-icon {background: url("../images/board/board-03.png") center no-repeat;}
+				&.admin-03-icon {background: url("../images/board/board-05.png") center no-repeat;}
+				&.admin-04-icon {background: url("../images/board/board-07.png") center no-repeat;}
+				&.admin-05-icon {background: url("../images/board/board-09.png") center no-repeat;}
+			}
+		}
+		.iconpro-text {
+			width: 100%;
+			text-align: center;
+			padding: 10px 20px 20px;
+			font-size: 22px;
+			font-weight: bold;
+			text-transform: uppercase;
+			min-height: 100px;
+			color:$color-primary;
+		}
+		&:hover {
+			.board-icon {
+				&.admin-01-icon {background: url("../images/board/board-02.png") center no-repeat;}
+				&.admin-02-icon {background: url("../images/board/board-04.png") center no-repeat;}
+				&.admin-03-icon {background: url("../images/board/board-06.png") center no-repeat;}
+				&.admin-04-icon {background: url("../images/board/board-08.png") center no-repeat;}
+				&.admin-05-icon {background: url("../images/board/board-10.png") center no-repeat;}
+			}
+			.iconpro-text {
+				color:$color-secondary;				
+			}
+		}
+	}
+}

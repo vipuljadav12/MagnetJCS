@@ -1,0 +1,5 @@
+<?php
+
+/**
+ *	School Helper  
+ */

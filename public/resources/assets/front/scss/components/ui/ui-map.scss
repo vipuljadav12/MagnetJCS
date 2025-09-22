@@ -1,0 +1,10 @@
+.map-container{
+    height: 300px;
+	#map_orders {
+		.jvectormap-container {width: 100%; height: 60vh !important;}
+	}
+	@media only screen and (min-width: 576px) {height: 350px;}
+	@media only screen and (min-width: 768px) {height: 400px;}
+	@media only screen and (min-width: 992px) {height: 500px;}
+	@media only screen and (min-width: 1200px) {height: 600px;}
+}
