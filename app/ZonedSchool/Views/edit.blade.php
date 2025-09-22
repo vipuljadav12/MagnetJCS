@@ -128,6 +128,6 @@
     </form>
 @endsection
 @section('scripts')
-    <script src="{{asset('resources/assets/common/js/jquery.validate.min.js')}}"></script>
-    <script src="{{asset('resources/assets/common/js/additional-methods.min.js')}}"></script>
+    <script src="{{asset('resources/assets/admin/js/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('resources/assets/admin/js/additional-methods.min.js')}}"></script>
 @endsection

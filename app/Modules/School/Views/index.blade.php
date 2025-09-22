@@ -57,8 +57,8 @@
 @endsection
 @section('scripts')
 <!-- Sweet Alert -->
-<script src="{{url('/resources/assets/plugins/sweet-alert2/sweetalert2.min.js')}}"></script>
-<script src="{{url('/resources/assets/plugins/sweet-alert2/jquery.sweet-alert.init.js')}}"></script>
+<script src="{{url('/resources/assets/admin/plugins/sweet-alert2/sweetalert2.min.js')}}"></script>
+{{-- <script src="{{url('/resources/assets/plugins/sweet-alert2/jquery.sweet-alert.init.js')}}"></script> --}}
 <script type="text/javascript">
     $(document).ready(function(){
         $(".alert").delay(2000).fadeOut(1000);

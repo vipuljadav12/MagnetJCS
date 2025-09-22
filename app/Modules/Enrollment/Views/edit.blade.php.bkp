@@ -184,8 +184,8 @@
 @section('scripts')
     <!-- InstanceBeginEditable name="Footer Scripts" -->
     <script type="text/javascript" src="{{url('resources/assets/admin/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
-    <script src="{{asset('resources/assets/common/js/jquery.validate.min.js')}}"></script>
-    <script src="{{asset('resources/assets/common/js/additional-methods.min.js')}}"></script>
+    <script src="{{asset('resources/assets/admin/js/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('resources/assets/admin/js/additional-methods.min.js')}}"></script>
 
     <script>
 
