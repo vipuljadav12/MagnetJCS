@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 
+if (!function_exists('checkPermission')) {
 function checkPermission($role_id, $slug)
 {
     $flag  = 0;
@@ -17,6 +18,8 @@ function checkPermission($role_id, $slug)
 
     return $flag;
 }
+}
+if (!function_exists('checkPermission')) {
 function getDistrictLogo($logo_type = "")
 {
     if (Session::has('district_id')) {
@@ -34,7 +37,8 @@ function getDistrictLogo($logo_type = "")
     }
     return url('/resources/assets/admin/images/login.png');
 }
-
+}
+if (!function_exists('checkPermission')) {
 function get_form_name($form_id)
 {
     $FormControl = new \App\Modules\Form\Models\Form;
@@ -44,7 +48,8 @@ function get_form_name($form_id)
     else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function get_district_combo()
 {
     $districtList = "";
@@ -69,7 +74,8 @@ function get_district_combo()
     //        echo $districtList;exit;
     return $districtList;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function get_enrollment_combo()
 {
     $district_id = Session::get('district_id');
@@ -85,7 +91,8 @@ function get_enrollment_combo()
     }
     return $enrollList;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function theme_css()
 {
     $css = "<style>
@@ -95,7 +102,8 @@ function theme_css()
     $css .= "</style>";
     return $css;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getTopLinks()
 {
     $topLinks = DB::table("landing_links")->where("district_id", Session::get("district_id"))->where('status', 'Y')->orderBy('sort_order')->get();
@@ -118,7 +126,8 @@ function getTopLinks()
     $linkStr .= "</div>";
     return $linkStr;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getConfig()
 {
     if (session('district_id')) {
@@ -133,28 +142,32 @@ function getConfig()
     }
     return $return;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getFormbyId($form_id)
 {
     $FrontControl = new \App\Http\Controllers\HomeController;
     $data  = $FrontControl->getFormbyId($form_id);
     return $data;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getPreviewFieldByTypeandId($type_id, $form_field_id, $form_id = '')
 {
     $FrontControl = new \App\Http\Controllers\HomeController;
     $data  = $FrontControl->getPreviewFieldByTypeandId($type_id, $form_field_id, $form_id);
     return $data;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getFieldByTypeandId($type_id, $form_field_id, $form_id = '')
 {
     $FrontControl = new \App\Http\Controllers\HomeController;
     $data  = $FrontControl->getFieldByTypeandId($type_id, $form_field_id, $form_id);
     return $data;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getOnlyFieldProperty($type_id, $form_field_id, $form_id = '')
 {
     $property = DB::table('form_content')->join('form_build', 'form_build.id', 'form_content.build_id')->where('build_id', $form_field_id)->select('form_content.*', 'form_build.type')->orderBy('sort_option')->get();
@@ -167,13 +180,15 @@ function getOnlyFieldProperty($type_id, $form_field_id, $form_id = '')
     //    print_r($data);
     return $data;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function get_form_pages($form_id)
 {
     $rsForm = DB::table("form")->where('id', $form_id)->first();
     return $rsForm->no_of_pages;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getFormElementLabel($field_id)
 {
     $rsField = DB::table("form_content")->where('build_id', $field_id)->where('field_property', 'label')->first();
@@ -182,7 +197,8 @@ function getFormElementLabel($field_id)
     } else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getFormElementType($field_id)
 {
     $rsField = DB::table("form_build")->where('id', $field_id)->first();
@@ -191,13 +207,15 @@ function getFormElementType($field_id)
     } else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function get_district_slug()
 {
     $rsDistrict = DB::table("district")->where("id", Session::get("district_id"))->first();
     return $rsDistrict->district_slug;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function fetch_student_field_id($form_id, $field = 'student_id')
 {
     $rs_field = DB::table("form_content")->where('field_property', 'db_field')->where('field_value', $field)->join('form_build', 'form_build.id', 'form_content.build_id')->where('form_content.form_id', $form_id)->first();
@@ -207,7 +225,8 @@ function fetch_student_field_id($form_id, $field = 'student_id')
         return 0;
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getFrontProgramDropdown()
 {
     $application_id = Session::get("application_id");
@@ -216,8 +235,8 @@ function getFrontProgramDropdown()
     $rs_program_grade = DB::table("application_programs")->where("application_id", $application_id)->where("program.parent_submission_form", $form_id)->join("program", "program.id", "application_programs.program_id")->join("grade", "grade.id", "application_programs.grade_id")->select("program.name as program_name", "grade.name as grade_name", "application_programs.id", "application_programs.program_id")->get();
     return $rs_program_grade;
 }
-
-
+}
+if (!function_exists('checkPermission')) {
 function getProgramDropdown($application_id = 0)
 {
     if ($application_id > 0) {
@@ -228,7 +247,8 @@ function getProgramDropdown($application_id = 0)
     //dd($rs_program_grade);
     return $rs_program_grade;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSchoolMasterName($zoned_school_name)
 {
     $rs = \App\Modules\School\Models\School::where("zoning_api_name", $zoned_school_name)->orWhere("sis_name", $zoned_school_name)->orWhere("name", $zoned_school_name)->select("name")->first();
@@ -237,7 +257,8 @@ function getSchoolMasterName($zoned_school_name)
     else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSchoolId($school_name)
 {
     $rs = \App\Modules\School\Models\School::where("name", $school_name)->first();
@@ -246,7 +267,8 @@ function getSchoolId($school_name)
     else
         return 0;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSchoolName($id)
 {
     $rs = \App\Modules\School\Models\School::where("id", $id)->first();
@@ -255,19 +277,22 @@ function getSchoolName($id)
     else
         return 0;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEnrolmentConfirmationStyle($application_id)
 {
     $confirm_style = DB::table("enrollments")->join("application", "application.enrollment_id", "enrollments.id")->where("application.id", $application_id)->first();
     return $confirm_style->confirmation_style;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function checkDuplicateFields($form_id)
 {
     $duplication_build = DB::table("form_content")->where('form_id', $form_id)->where('field_property', 'check_unique')->where('field_value', 'yes')->get();
     return $duplication_build;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function get_field_value($build_id, $form_id, $field_property)
 {
     $field_value = DB::table("form_content")->where("build_id", $build_id)->where("form_id", $form_id)->where('field_property', $field_property)->first();
@@ -277,7 +302,8 @@ function get_field_value($build_id, $form_id, $field_property)
         return "";
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function generate_lottery_number()
 {
     $lotteryNumbers = array(0, 0, 0, 0, 0, 0);
@@ -322,7 +348,8 @@ function generate_lottery_number()
     }
     return $lottery_number;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getNextGradeField($form_field_id)
 {
     $form = DB::table("form_build")->where('id', $form_field_id)->first();
@@ -334,7 +361,8 @@ function getNextGradeField($form_field_id)
         return 0;
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getZonedSchoolField($form_field_id)
 {
     $form = DB::table("form_build")->where('id', $form_field_id)->first();
@@ -346,6 +374,8 @@ function getZonedSchoolField($form_field_id)
         return 0;
     }
 }
+}
+if (!function_exists('checkPermission')) {
 function getCurrentGradeField($form_field_id)
 {
     $form = DB::table("form_build")->where('id', $form_field_id)->first();
@@ -357,7 +387,8 @@ function getCurrentGradeField($form_field_id)
         return 0;
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getCurrentSchoolField($form_field_id)
 {
     $form = DB::table("form_build")->where('id', $form_field_id)->first();
@@ -369,7 +400,8 @@ function getCurrentSchoolField($form_field_id)
         return 0;
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getStudentGradeData($state_id)
 {
     $grade_data = DB::table("studentgrade")->where('stateID', $state_id)->get();
@@ -380,7 +412,8 @@ function getStudentGradeData($state_id)
         return array();
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getStudentGradeDataYear($state_id, $term_arr, $term_arr1, $subjects)
 {
     $sub = array();
@@ -420,8 +453,8 @@ function getStudentGradeDataYear($state_id, $term_arr, $term_arr1, $subjects)
 
     return array("type" => $type, "data" => $tmp_data);
 }
-
-
+}
+if (!function_exists('checkPermission')) {
 function getStudentGradeDataYearLate($state_id, $term_calc, $academic_years, $subjects)
 {
     $sub = array();
@@ -459,7 +492,8 @@ function getStudentGradeDataYearLate($state_id, $term_calc, $academic_years, $su
 
     return array("type" => $type, "data" => $tmp_data);
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getConsolidatedGradeWeekData($grade_data, $course_type_id, $conversion)
 {
     if ($conversion == "SEM") {
@@ -491,6 +525,7 @@ function getConsolidatedGradeWeekData($grade_data, $course_type_id, $conversion)
         return array("Yearly" => number_format($total / $count, 0));
     }
 }
+}
 
 /*function getStudentConductData($state_id)
 {
@@ -506,6 +541,7 @@ function getConsolidatedGradeWeekData($grade_data, $course_type_id, $conversion)
     }
 }*/
 
+if (!function_exists('checkPermission')) {
 function getStudentStandardData($state_id)
 {
     $standard_data = DB::table("student_standard_testing")->where('stateID', $state_id)->first();
@@ -516,7 +552,8 @@ function getStudentStandardData($state_id)
         return array();
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getAcademicYearGrade($grade_data)
 {
     $academic_year = array();
@@ -527,7 +564,8 @@ function getAcademicYearGrade($grade_data)
     }
     return $academic_year;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getAcademicTerms($grade_data)
 {
     //    print_r()
@@ -540,7 +578,8 @@ function getAcademicTerms($grade_data)
     //print_r($academic_terms);exit;
     return $academic_terms;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEligibilities($choice_id, $type = '')
 {
     $program = DB::table("application_programs")->where("id", $choice_id)->first();
@@ -555,7 +594,8 @@ function getEligibilities($choice_id, $type = '')
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEligibilitiesDynamic($choice_id, $type = '')
 {
     $program = DB::table("application_programs")->where("id", $choice_id)->first();
@@ -571,7 +611,8 @@ function getEligibilitiesDynamic($choice_id, $type = '')
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEligibilitiesLateSubmission($choice_id, $type = '')
 {
     $program = DB::table("application_programs")->where("id", $choice_id)->first();
@@ -587,7 +628,8 @@ function getEligibilitiesLateSubmission($choice_id, $type = '')
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSubmissionEligibilities($submission)
 {
     $choice_id = array();
@@ -614,7 +656,8 @@ function getSubmissionEligibilities($submission)
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getLateSubmissionEligibilities($submission)
 {
     $choice_id = array();
@@ -640,7 +683,8 @@ function getLateSubmissionEligibilities($submission)
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 
 function getEligibilitiesByProgram($program_id, $type = '')
 {
@@ -651,7 +695,8 @@ function getEligibilitiesByProgram($program_id, $type = '')
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEligibilitiesByProgramDynamic($program_id, $type = '', $application_id = '')
 {
     if ($type == '') {
@@ -661,7 +706,8 @@ function getEligibilitiesByProgramDynamic($program_id, $type = '', $application_
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEligibilitiesByProgramLateSubmission($program_id, $type = '')
 {
     if ($type == '') {
@@ -671,13 +717,15 @@ function getEligibilitiesByProgramLateSubmission($program_id, $type = '')
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEligibilityContent1($eligibility_id)
 {
     $eligibiility_data = DB::table("eligibility_content")->where("eligibility_id", $eligibility_id)->first();
     return json_decode($eligibiility_data->content);
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getFieldSequence($field_id)
 {
     $form = DB::table("form_build")->where("id", $field_id)->first();
@@ -687,7 +735,8 @@ function getFieldSequence($field_id)
     } else
         return array();
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getStudentName($student_id)
 {
     $student = DB::table("student")->where('stateID', $student_id)->first();
@@ -696,7 +745,8 @@ function getStudentName($student_id)
     } else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function findSubmissionForm($application_id)
 {
     $form_data = DB::table("form")->join("application", "application.form_id", "form.id")->where("application.id", $application_id)->select("form.name")->first();
@@ -705,7 +755,8 @@ function findSubmissionForm($application_id)
     else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function findFormName($form_id)
 {
     $form_data = DB::table("form")->where("id", $form_id)->first();
@@ -714,7 +765,8 @@ function findFormName($form_id)
     else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getApplicationDetailsById($application_id)
 {
     $enrollment_id = DB::table("application")->where("id", $application_id)->pluck("enrollment_id")->first();
@@ -724,7 +776,8 @@ function getApplicationDetailsById($application_id)
     return $enrollment_id;
     // SELECT * FROM APPLICATION WHERE ID=59
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getProgramName($program_id)
 {
     $program = DB::table("program")->where("id", $program_id)->first();
@@ -733,7 +786,8 @@ function getProgramName($program_id)
     else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function findGPA($score, $gpa_limit)
 {
     $gpa_grade = "0";
@@ -748,7 +802,8 @@ function findGPA($score, $gpa_limit)
     }
     return $gpa_grade;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSubmissionGradeData($submission_id, $term_calc, $academic_years)
 {
     $term1 = (date("Y") - 1) . "-" . (date("Y"));
@@ -784,7 +839,8 @@ function getSubmissionGradeData($submission_id, $term_calc, $academic_years)
         return array();
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getLateSubmissionGradeData($submission_id, $term_calc, $academic_years)
 {
     $term1 = (date("Y") - 1) . "-" . (date("Y"));
@@ -821,7 +877,8 @@ function getLateSubmissionGradeData($submission_id, $term_calc, $academic_years)
     }
     return $tmpdata;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSubmissionGradeCalculationData($submission_id)
 {
     $submission_grade_data = DB::table("submission_academic_grade_calculation")->where("submission_id", $submission_id)->first();
@@ -831,7 +888,8 @@ function getSubmissionGradeCalculationData($submission_id)
         return array();
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getViewEnableFields($form_id)
 {
     $form = DB::table("form_content")->where("form_id", $form_id)->where("field_property", "display_view")->where("field_value", "yes")->get();
@@ -848,7 +906,8 @@ function getViewEnableFields($form_id)
     } else
         return array();
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getViewEnable($build_id)
 {
     $form = DB::table("form_content")->where("build_id", $build_id)->where("field_property", "display_view")->where("field_value", "yes")->first();
@@ -858,7 +917,8 @@ function getViewEnable($build_id)
     else
         return false;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getAcademicScore($student_id, $courseType, $GradeName, $term1, $term2, $submission_id = 0)
 {
     $data = DB::table("submission_grade")->where("submission_id", $submission_id)->where("courseType", $courseType)->where("GradeName", $GradeName)->where(function ($query) use ($term1, $term2) {
@@ -879,7 +939,8 @@ function getAcademicScore($student_id, $courseType, $GradeName, $term1, $term2, 
     } else
         return 0;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSubmissionAcademicScore($submission_id, $courseType, $GradeName, $term1, $term2)
 {
     $data = DB::table("submission_grade")->where("submission_id", $submission_id)->where("courseType", $courseType)->where("academicTerm", $GradeName)->where(function ($query) use ($term1, $term2) {
@@ -943,7 +1004,8 @@ function getSubmissionAcademicScore($submission_id, $courseType, $GradeName, $te
         return 0;
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSubmissionAcademicScoreMissing($submission_id, $courseType, $GradeName, $term1, $term2)
 {
     $data = DB::table("submission_grade")->where("submission_id", $submission_id)->where("courseType", $courseType)->where("GradeName", $GradeName)->where(function ($query) use ($term1, $term2) {
@@ -986,7 +1048,8 @@ function getSubmissionAcademicScoreMissing($submission_id, $courseType, $GradeNa
         return "NA";
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 
 function getApplicationProgramName($program_id)
 {
@@ -997,7 +1060,8 @@ function getApplicationProgramName($program_id)
     } else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 
 function getApplicationProgramId($program_id)
 {
@@ -1008,7 +1072,8 @@ function getApplicationProgramId($program_id)
     } else
         return 0;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSetEligibilityData($application_program_id, $type)
 {
     $rs = DB::table("program")->join("application_programs", "application_programs.program_id", "program.id")->where("application_programs.id", $application_program_id)->select("program.id")->first();
@@ -1024,7 +1089,8 @@ function getSetEligibilityData($application_program_id, $type)
         return array();
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSetEligibilityDataDynamic($application_program_id, $type)
 {
     $rs = DB::table("program")->join("application_programs", "application_programs.program_id", "program.id")->where("application_programs.id", $application_program_id)->select("program.id", "application_programs.application_id")->first();
@@ -1040,7 +1106,8 @@ function getSetEligibilityDataDynamic($application_program_id, $type)
         return array();
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSetEligibilityDataLS($application_program_id, $type)
 {
     $rs = DB::table("program")->join("application_programs", "application_programs.program_id", "program.id")->where("application_programs.id", $application_program_id)->select("program.id")->first();
@@ -1056,7 +1123,8 @@ function getSetEligibilityDataLS($application_program_id, $type)
         return array();
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSetEligibilityDataByProgramID($program_id, $type)
 {
     $data = DB::table('seteligibility_extravalue')->where('program_id', $program_id)->where('eligibility_type', $type)->first();
@@ -1065,6 +1133,8 @@ function getSetEligibilityDataByProgramID($program_id, $type)
     else
         return array();
 }
+}
+if (!function_exists('checkPermission')) {
 function getStudentConductData($state_id, $submission_id = 0)
 {
     $conduct_data = DB::table("submission_conduct_discplinary_info")->where('submission_id', $submission_id)->first();
@@ -1077,6 +1147,8 @@ function getStudentConductData($state_id, $submission_id = 0)
         return array();
     }
 }
+}
+if (!function_exists('checkPermission')) {
 function getDateTimeFormat($date)
 {
     if ($date != '')
@@ -1085,11 +1157,14 @@ function getDateTimeFormat($date)
         return date('m/d/Y');
     }
 }
+}
+if (!function_exists('checkPermission')) {
 function getDateFormat($date)
 {
     return date('m/d/Y', strtotime($date));
 }
-
+}
+if (!function_exists('checkPermission')) {
 function findArrayKey($arr, $value)
 {
     foreach ($arr as $key => $val) {
@@ -1098,7 +1173,8 @@ function findArrayKey($arr, $value)
     }
     return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getUserName($user_id)
 {
     $username = "";
@@ -1110,7 +1186,8 @@ function getUserName($user_id)
     }
     return $username;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getAlertMsg($msg_title)
 {
     $data = DB::table("common_alert_msg")->where("msg_title", $msg_title)->first();
@@ -1119,7 +1196,8 @@ function getAlertMsg($msg_title)
     else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function fetch_conduct_details($student_id)
 {
     $data = DB::table("student_cdi_details")->where("stateID", $student_id)->orderByDesc('datetime')->get();
@@ -1129,7 +1207,8 @@ function fetch_conduct_details($student_id)
         return array();
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getMagnetSchool($program_id)
 {
     $data = DB::table("program")->where("id", $program_id)->where("existing_magnet_program_alert", "Y")->select("magnet_school")->first();
@@ -1145,7 +1224,8 @@ function getMagnetSchool($program_id)
         return array();
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getFieldLabel($field)
 {
     $content = DB::table("form_content")->where("field_value", $field)->first(['build_id']);
@@ -1155,6 +1235,8 @@ function getFieldLabel($field)
         return null;
     }
 }
+}
+if (!function_exists('checkPermission')) {
 function sendMail($emailArr, $log = false)
 {
     $msg = $emailArr['msg'];
@@ -1201,7 +1283,8 @@ function sendMail($emailArr, $log = false)
 
     return true;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getMaxGrade($program_id)
 {
     $data = \App\Modules\Program\Models\Program::where("id", $program_id)->first();
@@ -1213,7 +1296,8 @@ function getMaxGrade($program_id)
     else
         return $cgrade;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEnrollmentYear($enrollment_id)
 {
     $enrollment = DB::table("enrollments")->where('id', $enrollment_id)->first();
@@ -1222,7 +1306,8 @@ function getEnrollmentYear($enrollment_id)
     else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getApplicationName($application_id)
 {
     $application = DB::table("application")->where('id', $application_id)->first();
@@ -1231,7 +1316,8 @@ function getApplicationName($application_id)
     else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function get_signature($type)
 {
     $dist_config = App\Modules\DistrictConfiguration\Models\DistrictConfiguration::where('district_id', \Session('district_id'))
@@ -1243,6 +1329,8 @@ function get_signature($type)
     }
     return str_replace("https://", "http://", $signature);
 }
+}
+if (!function_exists('checkPermission')) {
 function changeTimezone()
 {
     $dist_config = App\Modules\District\Models\District::where('id', \Session('district_id'))
@@ -1250,7 +1338,8 @@ function changeTimezone()
         ->first();
     file_put_contents("resources/filebrowser/Timezone.txt", ($dist_config->district_timezone ?? 'US/Central'));
 }
-
+}
+if (!function_exists('checkPermission')) {
 function find_replace_string($str, $arr)
 {
     foreach ($arr as $key => $value) {
@@ -1259,7 +1348,8 @@ function find_replace_string($str, $arr)
     }
     return $str;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function fetch_individual_custom_communication($id)
 {
     $data = DB::table("custom_communication_data")->where('type', 'Letter')->where("submission_id", $id)->select('custom_communication_data.*')->orderByDesc('created_at')->get();
@@ -1279,7 +1369,8 @@ function fetch_individual_custom_communication($id)
     }
     return $download_data;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function fetch_individual_email_log($id)
 {
     $data = DB::table("custom_communication_data")->where('type', 'Email')->where("submission_id", $id)->where('email_body', '<>', '')->select('custom_communication_data.*')->orderByDesc('created_at')->get();
@@ -1302,7 +1393,8 @@ function fetch_individual_email_log($id)
     }
     return $download_data;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSubmissionStudentName($id)
 {
     $data = DB::table("submissions")->where("id", $id)->first();
@@ -1311,7 +1403,8 @@ function getSubmissionStudentName($id)
     } else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function generateShortCode($value)
 {
     $application_data1 = \App\Modules\Application\Models\Application::join("enrollments", "enrollments.id", "application.enrollment_id")->where("application.status", "Y")->where("application.id", $value->application_id)->select("application.*", "enrollments.school_year")->first();
@@ -1348,7 +1441,8 @@ function generateShortCode($value)
     $tmp['next_year'] = date("Y") + 1;
     return $tmp;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getLocationInfoByIp($ip_address = '')
 {
     if (empty($ip_address)) {
@@ -1378,7 +1472,8 @@ function getLocationInfoByIp($ip_address = '')
     }
     return $result;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getContratIPInfo($submission_id)
 {
     $data = DB::table("contract_logs")->where("submission_id", $submission_id)->first();
@@ -1394,7 +1489,8 @@ function getContratIPInfo($submission_id)
     }
     return $str;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function get_district_global_setting($type)
 {
     $dist_config = App\Modules\DistrictConfiguration\Models\DistrictConfiguration::where('name', $type)
@@ -1405,14 +1501,16 @@ function get_district_global_setting($type)
     }
     return $config_value;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getGradeUploadDocs($submission_id, $type)
 {
 
     $docs = App\Modules\UploadGrade\Models\Grade::where('submission_id', $submission_id)->where('file_type', $type)->get(['file_name', 'created_at']);
     return $docs;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getCDIUploadDocs($submission_id)
 {
 
@@ -1425,7 +1523,8 @@ function getCDIUploadDocs($submission_id)
 
     return '';
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSubmissionEligibilitiesIndividual($submission, $choice = '')
 {
     $choice_id = array();
@@ -1456,7 +1555,8 @@ function getSubmissionEligibilitiesIndividual($submission, $choice = '')
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getLateSubmissionEligibilitiesIndividual($submission, $choice = '')
 {
     $choice_id = array();
@@ -1487,7 +1587,8 @@ function getLateSubmissionEligibilitiesIndividual($submission, $choice = '')
     }
     return $eligibilities;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getWritingPromptDetails($submission_id, $eligibility, $late_submission = 'N')
 {
     // function getWritingPromptDetails($submission_id, $eligibility, $late_submission='N', $choice=''){
@@ -1521,7 +1622,8 @@ function getWritingPromptDetails($submission_id, $eligibility, $late_submission 
     }
     return json_encode($wp_data);
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSortCodeValues($value, $choice = 'first')
 {
 
@@ -1642,7 +1744,8 @@ function getSortCodeValues($value, $choice = 'first')
 
     return $tmp;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getRecommendationLinks($submission_id)
 {
     $recomm_links = \App\Modules\Submissions\Models\SubmissionData::where('submission_id', $submission_id)->where('config_name', 'LIKE', '%recommendation%')->where('config_name', 'LIKE', '%url%')->get();
@@ -1653,7 +1756,8 @@ function getRecommendationLinks($submission_id)
         return "";
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEligibilityConfig($program_id, $eligibility_id, $config_name)
 {
     $data = \App\Modules\SetEligibility\Models\SetEligibilityConfiguration::where("program_id", $program_id)->where("eligibility_id", $eligibility_id)->where("configuration_type", $config_name)->first();
@@ -1663,7 +1767,8 @@ function getEligibilityConfig($program_id, $eligibility_id, $config_name)
         return "";
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getEligibilityConfigDynamic($program_id, $eligibility_id, $config_name, $application_id)
 {
     $data = \App\Modules\SetEligibility\Models\SetEligibilityConfiguration::where("program_id", $program_id)->where("eligibility_id", $eligibility_id)->where("configuration_type", $config_name)->where("application_id", $application_id)->first();
@@ -1673,6 +1778,8 @@ function getEligibilityConfigDynamic($program_id, $eligibility_id, $config_name,
         return "";
     }
 }
+}
+if (!function_exists('checkPermission')) {
 function getRecommendationFormData($submission_id)
 {
     $data = \App\Modules\Submissions\Models\SubmissionRecommendation::where('submission_id', $submission_id)->get();
@@ -1683,7 +1790,8 @@ function getRecommendationFormData($submission_id)
         return "";
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function createEmailActivityLog($data = [])
 {
     $fields = ['submission_id', 'program_id', 'email_body', 'email_subject', 'email_to', 'module', 'status'];
@@ -1702,7 +1810,8 @@ function createEmailActivityLog($data = [])
     }
     App\Modules\WritingPrompt\Models\EmailActivityLog::create($create_data);
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getTestScoreData($submission_id, $eligibility, $late_submission = 'N')
 {
     $ts_data = DB::table('submission_test_score')->where('submission_id', $submission_id)->where('program_id', $eligibility->program_id)->get();
@@ -1728,7 +1837,8 @@ function getTestScoreData($submission_id, $eligibility, $late_submission = 'N')
 
     return $data;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getProgramByEligibility($type)
 {
 
@@ -1736,7 +1846,8 @@ function getProgramByEligibility($type)
 
     return $programs;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function checkCheckedProgram($program_id, $current_grade, $next_grade, $application_id = 0)
 {
     $rs = \App\Modules\Submissions\Models\ProgramChoiceException::where("program_id", $program_id)->where("grade", $current_grade)->first();
@@ -1761,7 +1872,8 @@ function checkCheckedProgram($program_id, $current_grade, $next_grade, $applicat
     }
 }
 
-
+}
+if (!function_exists('checkPermission')) {
 function getMajorityRace($submission)
 {
     $rsSchool = \App\Modules\School\Models\School::where("zoning_api_name", $submission->zoned_school)->whereRaw("FIND_IN_SET('" . $submission->next_grade . "', grade_id)")->first();
@@ -1780,7 +1892,8 @@ function getMajorityRace($submission)
     }
     return false;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getTestScoreDataIndividual($submission_id, $eligibility, $late_submission = 'N')
 {
     $ts_data = DB::table('submission_test_score')->where('submission_id', $submission_id)->where('program_id', $eligibility->program_id)->get();
@@ -1811,7 +1924,8 @@ function getTestScoreDataIndividual($submission_id, $eligibility, $late_submissi
     }
     return $data;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function build_sorter_asc($key)
 {
     return function ($x, $y) use ($key) {
@@ -1827,7 +1941,8 @@ function build_sorter_asc($key)
             return 1;
     };
 }
-
+}
+if (!function_exists('checkPermission')) {
 function build_sorter_desc($key)
 {
     return function ($x, $y) use ($key) {
@@ -1843,7 +1958,8 @@ function build_sorter_desc($key)
             return 1;
     };
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getPreliminaryScoreLateSubmissionCount($application_id = 0)
 {
     $count = 0;
@@ -1919,6 +2035,8 @@ function getPreliminaryScoreLateSubmissionCount($application_id = 0)
 
     return $count;
 }
+}
+if (!function_exists('checkPermission')) {
 function getPreliminaryScoreSubmissionCount($application_id = 0)
 {
     $count = 0;
@@ -1987,7 +2105,8 @@ function getPreliminaryScoreSubmissionCount($application_id = 0)
 
     return $count;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function generateCompositeScore($submission_id)
 {
     $submission = \App\Modules\Submissions\Models\Submissions::where("id", $submission_id)->first();
@@ -2045,7 +2164,8 @@ function generateCompositeScore($submission_id)
         $rs = \App\Modules\Submissions\Models\SubmissionCompositeScore::updateOrCreate(["submission_id" => $submission_id], $data);
     }
 }
-
+}
+if (!function_exists('checkPermission')) {
 function checkApplicationStatus($id)
 {
     $submission = \App\Modules\Submissions\Models\Submissions::where('application_id', $id)->first();
@@ -2054,7 +2174,8 @@ function checkApplicationStatus($id)
     }
     return true;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getChoiceAry($count = NULL)
 {
     if (!isset($count)) {
@@ -2064,7 +2185,8 @@ function getChoiceAry($count = NULL)
     $fltr_choice_ary = array_slice($choice_ary, 0, $count);
     return $fltr_choice_ary;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getSubmissionAcademicGradeData($submission)
 {
     $current_grade = $submission->current_grade;
@@ -2085,7 +2207,8 @@ function getSubmissionAcademicGradeData($submission)
     $data = DB::table("submission_grade")->where("submission_id", $submission->id)->whereIn('grade_level', $gradeArr)->orderBy("academicYear", "Desc")->get();
     return $data;
 }
-
+}
+if (!function_exists('checkPermission')) {
 function getCalculatedRace($race)
 {
     $rs = \App\Modules\Submissions\Models\RaceDivision::where("actual_race", $race)->first();
@@ -2098,7 +2221,8 @@ function getCalculatedRace($race)
     } else
         return "";
 }
-
+}
+if (!function_exists('checkPermission')) {
 function check_last_process($submission_id)
 {
     $rsMain = \App\Modules\Submissions\Models\SubmissionsFinalStatus::where("submission_id", $submission_id)->first();
@@ -2137,4 +2261,5 @@ function check_last_process($submission_id)
         }
     }
     return array("id" => 0, "finalObj" => "", "version" => 0);
+}
 }
