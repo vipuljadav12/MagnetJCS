@@ -522,410 +522,408 @@
             }
 
 
-            $(document).on("change", ".changeDate", function() {
-                let year = $(document).find("#year").val();
-                let month = $(document).find("#month").val();
-                let day = $(document).find("#day").val();
-                $(document).find("#birthdayFiller").val(year + "-" + month + "-" + day);
-            });
+        }
 
-            function showHideEmployee(obj) {
-                if ($("#employee_id").length > 0 && $("#work_location").length > 0) {
-                    if ($(obj).val() == "Yes") {
-                        if ($("#mcp_employee_element").length > 0) {
-                            $("#mcp_employee_element").val("Yes");
-                        }
-                        $("#employee_id").show();
-                        $("#work_location").show();
+        $(document).on("change", ".changeDate", function() {
+            let year = $(document).find("#year").val();
+            let month = $(document).find("#month").val();
+            let day = $(document).find("#day").val();
+            $(document).find("#birthdayFiller").val(year + "-" + month + "-" + day);
+        });
 
-                        $("#employee_first_name").show();
-                        $("#employee_last_name").show();
-
-                        $("#employee_id").find("input").attr("required", "required");
-                        $("#work_location").find("input").attr("required", "required");
-                        $("#employee_first_name").find("input").attr("required", "required");
-                        $("#employee_last_name").find("input").attr("required", "required");
-
-                    } else {
-                        if ($("#mcp_employee_element").length > 0) {
-                            $("#mcp_employee_element").val("No");
-                        }
-                        $("#employee_id").hide();
-                        $("#work_location").hide();
-
-                        $("#employee_first_name").hide();
-                        $("#employee_last_name").hide();
-
-
-                        $("#employee_id").find("input").removeAttr("required");
-                        $("#work_location").find("input").removeAttr("required");
-                        $("#employee_first_name").find("input").removeAttr("required");
-                        $("#employee_last_name").find("input").removeAttr("required");
+        function showHideEmployee(obj) {
+            if ($("#employee_id").length > 0 && $("#work_location").length > 0) {
+                if ($(obj).val() == "Yes") {
+                    if ($("#mcp_employee_element").length > 0) {
+                        $("#mcp_employee_element").val("Yes");
                     }
-                }
-            }
+                    $("#employee_id").show();
+                    $("#work_location").show();
 
-            function checkSibling(obj) {
-                var str = $(obj).attr("id").replace("_sibling_field", "");
-                var val = $("#" + str + "_choice").val();
+                    $("#employee_first_name").show();
+                    $("#employee_last_name").show();
 
-                if (val != "") {
-                    if ($.trim($(obj).val()) != "") {
-                        $(obj).siblings("span").removeClass("hidden");
-                        $(obj).addClass("hidden");
-                        var sibling_id = $(obj).val();
-                        var labelid = $(obj).attr("name") + "_label";
-                        $("." + labelid).removeClass("hidden");
-                        var url = "{{ url('/check/sibling') }}/" + sibling_id + "/" + val;
-                        $.ajax({
-                            url: url,
-                            method: 'get',
-                            success: function(response) {
+                    $("#employee_id").find("input").attr("required", "required");
+                    $("#work_location").find("input").attr("required", "required");
+                    $("#employee_first_name").find("input").attr("required", "required");
+                    $("#employee_last_name").find("input").attr("required", "required");
 
-
-                                if ($.trim(response) == "") {
-                                    if ($(obj).attr("id") == "student_id") {
-                                        swal({
-                                            text: "{{ getAlertMsg('sibling_error') }}",
-                                            type: "warning",
-                                            confirmButtonText: "OK",
-                                            confirmButtonColor: "#d62516"
-                                        });
-                                    } else {
-                                        swal({
-                                            text: "{{ getAlertMsg('sibling_error') }}",
-                                            type: "warning",
-                                            confirmButtonText: "OK",
-                                            confirmButtonColor: "#d62516"
-                                        });
-                                        var labelid = $(obj).attr("name") + "_label";
-                                        $("." + labelid).html("");
-                                    }
-                                    $(obj).val("");
-                                    $(obj).focus();
-                                    $(obj).removeClass("hidden");
-                                    $(obj).siblings("span").addClass("hidden");
-
-
-                                } else {
-                                    $(obj).siblings("span").addClass("hidden");
-                                    $(obj).removeClass("hidden");
-                                    if ($(obj).attr("id") != "student_id") {
-                                        var labelid = $(obj).attr("name") + "_label";
-                                        $("." + labelid).html(response);
-                                        $("." + labelid).removeClass("hidden");
-                                    }
-                                }
-                            }
-                        });
-                    }
                 } else {
-                    swal({
-                        text: "Please select program first",
-                        type: "warning",
-                        confirmButtonText: "OK",
-                        confirmButtonColor: "#d62516"
-                    });
-                    $(obj).val("");
+                    if ($("#mcp_employee_element").length > 0) {
+                        $("#mcp_employee_element").val("No");
+                    }
+                    $("#employee_id").hide();
+                    $("#work_location").hide();
+
+                    $("#employee_first_name").hide();
+                    $("#employee_last_name").hide();
+
+
+                    $("#employee_id").find("input").removeAttr("required");
+                    $("#work_location").find("input").removeAttr("required");
+                    $("#employee_first_name").find("input").removeAttr("required");
+                    $("#employee_last_name").find("input").removeAttr("required");
                 }
             }
+        }
 
-            function checkStudentID(obj) {
-                var val = $.trim($(obj).val());
 
-                if (val != "") {
+
+        // Global function to check sibling - moved outside closure for global access
+        function checkSibling(obj) {
+            var str = $(obj).attr("id").replace("_sibling_field", "");
+            var val = $("#" + str + "_choice").val();
+
+            if (val != "") {
+                if ($.trim($(obj).val()) != "") {
                     $(obj).siblings("span").removeClass("hidden");
                     $(obj).addClass("hidden");
-
-                    var url = "{{ url('/check/student') }}/" + val;
+                    var sibling_id = $(obj).val();
+                    var labelid = $(obj).attr("name") + "_label";
+                    $("." + labelid).removeClass("hidden");
+                    var url = "{{ url('/check/sibling') }}/" + sibling_id + "/" + val;
                     $.ajax({
                         url: url,
                         method: 'get',
                         success: function(response) {
-                            if ($.trim(response) == "") {
-                                //swal("Invalid Student ID",'',"error");
 
-                                swal({
-                                    text: "Invalid Student ID",
-                                    type: "warning",
-                                    confirmButtonText: "OK",
-                                    confirmButtonColor: "#d62516"
-                                });
-                                //alert("");
+
+                            if ($.trim(response) == "") {
+                                if ($(obj).attr("id") == "student_id") {
+                                    swal({
+                                        text: "{{ getAlertMsg('sibling_error') }}",
+                                        type: "warning",
+                                        confirmButtonText: "OK",
+                                        confirmButtonColor: "#d62516"
+                                    });
+                                } else {
+                                    swal({
+                                        text: "{{ getAlertMsg('sibling_error') }}",
+                                        type: "warning",
+                                        confirmButtonText: "OK",
+                                        confirmButtonColor: "#d62516"
+                                    });
+                                    var labelid = $(obj).attr("name") + "_label";
+                                    $("." + labelid).html("");
+                                }
                                 $(obj).val("");
                                 $(obj).focus();
-                            } else if ($.trim(response) == "Higher") {
-                                //swal("Invalid Student ID",'',"error");
+                                $(obj).removeClass("hidden");
+                                $(obj).siblings("span").addClass("hidden");
 
-                                /*swal({
-                                      text: "{{ getAlertMsg('no_program_available') }}",
-                                      type: "warning",
-                                      confirmButtonText: "OK",
-                                      confirmButtonColor: "#d62516"
-                                  });
-                                //alert("");
-                                $(obj).val("");
-                                $(obj).focus();*/
-                                document.location.href = "{{ url('/msgs/nograde') }}";
+
                             } else {
-                                if ($.trim(response) == "Magnet") {
-                                    magnetStudent = true;
+                                $(obj).siblings("span").addClass("hidden");
+                                $(obj).removeClass("hidden");
+                                if ($(obj).attr("id") != "student_id") {
+                                    var labelid = $(obj).attr("name") + "_label";
+                                    $("." + labelid).html(response);
+                                    $("." + labelid).removeClass("hidden");
                                 }
-
                             }
-
-                            $(obj).removeClass("hidden");
-                            $(obj).siblings("span").addClass("hidden");
-
                         }
                     });
                 }
+            } else {
+                swal({
+                    text: "Please select program first",
+                    type: "warning",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#d62516"
+                });
+                $(obj).val("");
             }
+        }
 
-            function submitForm(event) {
+        // Global function to check student ID - moved outside closure for global access
+        function checkStudentID(obj) {
+            var val = $.trim($(obj).val());
 
-                if ($("#first_choice").length > 0) {
-                    if ($("#first_choice").val() == "") {
+            if (val != "") {
+                $(obj).siblings("span").removeClass("hidden");
+                $(obj).addClass("hidden");
+
+                var url = "{{ url('/check/student') }}/" + val;
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    success: function(response) {
+                        if ($.trim(response) == "") {
+                            //swal("Invalid Student ID",'',"error");
+
+                            swal({
+                                text: "Invalid Student ID",
+                                type: "warning",
+                                confirmButtonText: "OK",
+                                confirmButtonColor: "#d62516"
+                            });
+                            //alert("");
+                            $(obj).val("");
+                            $(obj).focus();
+                        } else if ($.trim(response) == "Higher") {
+                            //swal("Invalid Student ID",'',"error");
+
+                            /*swal({
+                                  text: "{{ getAlertMsg('no_program_available') }}",
+                                  type: "warning",
+                                  confirmButtonText: "OK",
+                                  confirmButtonColor: "#d62516"
+                              });
+                            //alert("");
+                            $(obj).val("");
+                            $(obj).focus();*/
+                            document.location.href = "{{ url('/msgs/nograde') }}";
+                        } else {
+                            if ($.trim(response) == "Magnet") {
+                                magnetStudent = true;
+                            }
+
+                        }
+
+                        $(obj).removeClass("hidden");
+                        $(obj).siblings("span").addClass("hidden");
+
+                    }
+                });
+            }
+        }
+
+        function submitForm(event) {
+            if ($("#first_choice").length > 0) {
+                if ($("#first_choice").val() == "") {
+                    swal({
+                        text: "Please select at least one program",
+                        type: "warning",
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#d62516"
+                    });
+                    return false;
+                }
+                if ($("#customRadioInline1").prop("checked")) {
+                    if (jQuery("#first_sibling_field").val() == "") {
                         swal({
-                            text: "Please select at least one program",
+                            text: "Please enter Sibling State ID",
                             type: "warning",
                             confirmButtonText: "OK",
                             confirmButtonColor: "#d62516"
                         });
                         return false;
                     }
-                    if ($("#customRadioInline1").prop("checked")) {
-                        if (jQuery("#first_sibling_field").val() == "") {
-                            swal({
-                                text: "Please enter Sibling State ID",
-                                type: "warning",
-                                confirmButtonText: "OK",
-                                confirmButtonColor: "#d62516"
-                            });
-                            return false;
-                        }
-                    }
-
-
-                    if ($("#customRadioInline3").prop("checked")) {
-                        if (jQuery("#second_sibling_field").val() == "") {
-                            swal({
-                                text: "Please enter Sibling State ID",
-                                type: "warning",
-                                confirmButtonText: "OK",
-                                confirmButtonColor: "#d62516"
-                            });
-                            return false;
-                        }
-                    }
-
                 }
 
-                event.preventDefault();
-                swal({
-                    title: '',
-                    text: "Are you sure you would like to submit your application ?",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No',
-                }).then(function(isConfirm) {
-                    $('form[name="programform"]').removeAttr('onsubmit');
-                    $("#np").removeAttr('onclick');
-                    //          $("#programform" ).trigger( "submit" );
-                    $("#np").trigger('click');
-                })
-
-                //var txt;
-
+                if ($("#customRadioInline3").prop("checked")) {
+                    if (jQuery("#second_sibling_field").val() == "") {
+                        swal({
+                            text: "Please enter Sibling State ID",
+                            type: "warning",
+                            confirmButtonText: "OK",
+                            confirmButtonColor: "#d62516"
+                        });
+                        return false;
+                    }
+                }
             }
 
-
-            function printDiv() {
-                var divContents = "<div>" + document.getElementById("logo").innerHTML + "</div>";
-
-                divContents += "<div>" + document.getElementById("printmsg").innerHTML + "</div>";
-                var a = window.open('', '', 'height=500, width=500');
-                a.document.write('<html>');
-                a.document.write('<body>');
-                a.document.write(divContents);
-                a.document.write('</body></html>');
-                a.document.close();
-                a.print();
-            }
-
-            function submitToNextPage() {
-                $("#magntschool").modal('hide');
+            event.preventDefault();
+            swal({
+                title: '',
+                text: "Are you sure you would like to submit your application ?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+            }).then(function(isConfirm) {
                 $('form[name="programform"]').removeAttr('onsubmit');
-                $("#programform").trigger("submit");
+                $("#np").removeAttr('onclick');
+                //          $("#programform" ).trigger( "submit" );
                 $("#np").trigger('click');
-            }
+            })
 
-            function checkReturnStudentInfo() {
-                //alert($("#day").val() + " - " +  $("#month").val() + " - " + $("#year").val());
-                if ($("#student_id").val() == "") {
-                    swal({
-                        text: "Please enter student id.",
-                        type: "warning",
-                        confirmButtonText: "OK",
-                        confirmButtonColor: "#d62516"
-                    });
-                    return false;
+            //var txt;
+        }
 
-                } else if ($("#day").val() == null || $("#month").val() == null || $("#year").val() == null) {
-                    swal({
-                        text: "Please select proper birth date",
-                        type: "warning",
-                        confirmButtonText: "OK",
-                        confirmButtonColor: "#d62516"
-                    });
-                    return false;
-                } else {
-                    var date = $("#year").val() + "-" + $("#month").val() + "-" + $("#day").val();
-                    var sid = $("#student_id").val();
-                    var url = "{{ url('/check/return/student') }}/" + sid + "/" + date;
-                    $.ajax({
-                        url: url,
-                        method: 'get',
-                        success: function(response) {
-                            var data = $.parseJSON(response);
-                            if (data.error != "") {
-                                swal({
-                                    text: data.error,
-                                    type: "warning",
-                                    confirmButtonText: "OK",
-                                    confirmButtonColor: "#d62516"
-                                });
-                                return false;
-                            } else {
-                                $("#form_student_id").val(sid);
-                                $("#fetch_info_btn").addClass("hidden");
-                                var replacestr = data.replacestr;
+        function printDiv() {
+            var divContents = "<div>" + document.getElementById("logo").innerHTML + "</div>";
 
-                                var tmp = replacestr.replace("###LABEL###", "Student Name");
-                                tmp = tmp.replace("###VALUE###", data.data.student_name);
+            divContents += "<div>" + document.getElementById("printmsg").innerHTML + "</div>";
+            var a = window.open('', '', 'height=500, width=500');
+            a.document.write('<html>');
+            a.document.write('<body>');
+            a.document.write(divContents);
+            a.document.write('</body></html>');
+            a.document.close();
+            a.print();
+        }
 
-                                var str = tmp;
+        function submitToNextPage() {
+            $("#magntschool").modal('hide');
+            $('form[name="programform"]').removeAttr('onsubmit');
+            $("#programform").trigger("submit");
+            $("#np").trigger('click');
+        }
 
-                                tmp = replacestr.replace("###LABEL###", "Next Grade");
-                                tmp = tmp.replace("###VALUE###", data.data.next_grade);
-                                str += tmp;
+        function checkReturnStudentInfo() {
+            //alert($("#day").val() + " - " +  $("#month").val() + " - " + $("#year").val());
+            if ($("#student_id").val() == "") {
+                swal({
+                    text: "Please enter student id.",
+                    type: "warning",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#d62516"
+                });
+                return false;
 
-                                tmp = replacestr.replace("###LABEL###", "Race");
-                                tmp = tmp.replace("###VALUE###", data.data.race);
-                                str += tmp;
+            } else if ($("#day").val() == null || $("#month").val() == null || $("#year").val() == null) {
+                swal({
+                    text: "Please select proper birth date",
+                    type: "warning",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#d62516"
+                });
+                return false;
+            } else {
+                var date = $("#year").val() + "-" + $("#month").val() + "-" + $("#day").val();
+                var sid = $("#student_id").val();
+                var url = "{{ url('/check/return/student') }}/" + sid + "/" + date;
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    success: function(response) {
+                        var data = $.parseJSON(response);
+                        if (data.error != "") {
+                            swal({
+                                text: data.error,
+                                type: "warning",
+                                confirmButtonText: "OK",
+                                confirmButtonColor: "#d62516"
+                            });
+                            return false;
+                        } else {
+                            $("#form_student_id").val(sid);
+                            $("#fetch_info_btn").addClass("hidden");
+                            var replacestr = data.replacestr;
 
-                                tmp = replacestr.replace("###LABEL###", "Current School");
-                                tmp = tmp.replace("###VALUE###", data.data.current_school);
-                                str += tmp;
+                            var tmp = replacestr.replace("###LABEL###", "Student Name");
+                            tmp = tmp.replace("###VALUE###", data.data.student_name);
 
-                                tmp = replacestr.replace("###LABEL###", "Current Signature Academy");
-                                tmp = tmp.replace("###VALUE###", data.data.current_signature_academy);
-                                str += tmp;
-                                $("#returning_info").html(str);
-                                $("#confirm_div").removeClass("hidden");
-                            }
+                            var str = tmp;
 
+                            tmp = replacestr.replace("###LABEL###", "Next Grade");
+                            tmp = tmp.replace("###VALUE###", data.data.next_grade);
+                            str += tmp;
+
+                            tmp = replacestr.replace("###LABEL###", "Race");
+                            tmp = tmp.replace("###VALUE###", data.data.race);
+                            str += tmp;
+
+                            tmp = replacestr.replace("###LABEL###", "Current School");
+                            tmp = tmp.replace("###VALUE###", data.data.current_school);
+                            str += tmp;
+
+                            tmp = replacestr.replace("###LABEL###", "Current Signature Academy");
+                            tmp = tmp.replace("###VALUE###", data.data.current_signature_academy);
+                            str += tmp;
+                            $("#returning_info").html(str);
+                            $("#confirm_div").removeClass("hidden");
                         }
-                    });
-                }
+                    }
+                });
             }
+        }
 
-            function showIncorrectInfo(val) {
-                if (val != "") {
-                    $("#return_student").submit();
-                }
-                // if(val == "No")
-                // {
-                //   $("#return_student").submit();
-                // }
-                // else
-                // {
-                //     if(val == "Yes")
-                //     {
-                //       $("#submit_button").removeClass("hidden")
-                //     }
-                // }
+        function showIncorrectInfo(val) {
+            if (val != "") {
+                $("#return_student").submit();
             }
+            // if(val == "No")
+            // {
+            //   $("#return_student").submit();
+            // }
+            // else
+            // {
+            //     if(val == "Yes")
+            //     {
+            //       $("#submit_button").removeClass("hidden")
+            //     }
+            // }
+        }
 
-            function showReason(val) {
-                if (val == "No") {
-                    $("#reason_div").removeClass("hidden");
+        function showReason(val) {
+            if (val == "No") {
+                $("#reason_div").removeClass("hidden");
+                $("#submit_button").removeClass("hidden")
+            } else {
+                $("#reason_div").addClass("hidden");
+                if (val == "Yes") {
                     $("#submit_button").removeClass("hidden")
-                } else {
-                    $("#reason_div").addClass("hidden");
-                    if (val == "Yes") {
-                        $("#submit_button").removeClass("hidden")
-                    }
+                }
+            }
+        }
+
+        function showNext(val) {
+            if (val != "") {
+                $("#submit_button").removeClass("hidden")
+            } else {
+                $("#submit_button").addClass("hidden")
+            }
+        }
+
+        function submitReturnForm() {}
+        $(document).ready(function() {
+            if ($("#return_student").length > 0) {
+                var tmpDate = $("#birthdayFiller").val().split("-");
+                if (typeof tmpDate[0] !== 'undefined') {
+                    $("#year").val(tmpDate[0]);
+                }
+                if (typeof tmpDate[1] !== 'undefined') {
+                    $("#month").val(tmpDate[1]);
+                }
+                if (typeof tmpDate[2] !== 'undefined') {
+                    $("#day").val(tmpDate[2]);
                 }
             }
 
-            function showNext(val) {
-                if (val != "") {
-                    $("#submit_button").removeClass("hidden")
-                } else {
-                    $("#submit_button").addClass("hidden")
-                }
+            if ($("#return_student").length > 0) {
+                $("#return_student").validate({
+                    rules: {
+                        student_id: "required",
+                        birthday: "required",
+                        parent_first_name: "required",
+                        parent_last_name: "required",
+                        phone: "required",
+                        alternate_phone: "required",
+                        parent_email: {
+                            email: true
+                        }
+                    }
+
+                });
             }
 
-            function submitReturnForm() {}
-            $(document).ready(function() {
-                if ($("#return_student").length > 0) {
-                    var tmpDate = $("#birthdayFiller").val().split("-");
-                    if (typeof tmpDate[0] !== 'undefined') {
-                        $("#year").val(tmpDate[0]);
+            if ($("#return_student_step1").length > 0) {
+                $("#return_student_step1").validate({
+                    rules: {
+                        correct_information: "required"
                     }
-                    if (typeof tmpDate[1] !== 'undefined') {
-                        $("#month").val(tmpDate[1]);
-                    }
-                    if (typeof tmpDate[2] !== 'undefined') {
-                        $("#day").val(tmpDate[2]);
-                    }
-                }
 
-                if ($("#return_student").length > 0) {
-                    $("#return_student").validate({
-                        rules: {
-                            student_id: "required",
-                            birthday: "required",
-                            parent_first_name: "required",
-                            parent_last_name: "required",
-                            phone: "required",
-                            alternate_phone: "required",
-                            parent_email: {
-                                email: true
+                });
+            }
+
+            if ($("#return_student_step2").length > 0) {
+                $("#return_student_step2").validate({
+                    rules: {
+                        reason: {
+                            required: function(element) {
+                                return $("#returning_customer").val() == "No";
                             }
                         }
+                    }
 
-                    });
-                }
-
-                if ($("#return_student_step1").length > 0) {
-                    $("#return_student_step1").validate({
-                        rules: {
-                            correct_information: "required"
-                        }
-
-                    });
-                }
-
-                if ($("#return_student_step2").length > 0) {
-                    $("#return_student_step2").validate({
-                        rules: {
-                            reason: {
-                                required: function(element) {
-                                    return $("#returning_customer").val() == "No";
-                                }
-                            }
-                        }
-
-                    });
-                }
-
-
-            });
+                });
+            }
+        });
     </script>
 </body>
 
