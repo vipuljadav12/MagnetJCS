@@ -215,7 +215,7 @@
                     init: function() {
                         var chk = [];
                         $.ajax({
-                            url: '{{url(' / admin / shortCode / list ')}}',
+                            url: "{{url('/admin/shortCode/list')}}",
                             type: "get",
                             async: false,
                             success: function(response) {
