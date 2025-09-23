@@ -102,7 +102,6 @@
     });
 
     $('.roles-permission').click(function() {
-        console.log("hi");
         $(this).siblings('input:checkbox').prop('checked', false);
     });
 </script>

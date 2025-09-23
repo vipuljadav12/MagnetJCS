@@ -274,11 +274,6 @@ input[type="checkbox"]:checked:after {
 
           var withdrawn = parseInt($("#black"+id).val()) + parseInt($("#white"+id).val()) + parseInt($("#other"+id).val());
           var additional = parseInt($("#additional_seats"+id).val());
-
-          console.log("Additional " + additional);
-          console.log("Withdrawn " + withdrawn);
-          console.log("Additional " + parseInt($("#available_slot"+id).html()) + withdrawn + additional);
-
           $("#awardslot"+id).val(parseInt($("#available_slot"+id).html()) + withdrawn + additional);
           $("#awardslot_span"+id).html(parseInt($("#available_slot"+id).html()) + withdrawn + additional);
 

@@ -80,9 +80,7 @@
         $("#formSubmit").find('textarea[name="description"]').each(function(){
                 // $("#cke_description_"+i).remove();
                 if(length == i) {
-                    console.log('In:-'+i);
                     $(this).attr('id','description_'+i);
-                    
                 }
                 var ck_id = $(this).attr('id');
                 if(CKEDITOR.instances[ck_id])  {
@@ -427,7 +425,6 @@
             $(".field-type").removeClass("d-none");
         } else {
             if(type != undefined) {
-                console.log(" type undefined ");
                 setFormSettingValues(type);
             }    
         }

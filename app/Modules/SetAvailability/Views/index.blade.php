@@ -123,7 +123,6 @@
 
 
             if(parseInt(total || 0) == 0){ 
-                console.log(parseInt(total || 0));
                 $(document).find(".blackSeat[data-id='"+grade+"']").attr('disabled','disabled');
                 $(document).find(".whiteSeat[data-id='"+grade+"']").attr('disabled','disabled');
                 $(document).find(".otherSeat[data-id='"+grade+"']").attr('disabled','disabled');
