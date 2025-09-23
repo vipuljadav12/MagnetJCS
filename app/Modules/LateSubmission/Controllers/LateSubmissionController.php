@@ -92,7 +92,8 @@ class LateSubmissionController extends Controller
             $rs1 = Submissions::where("submission_status", "Offered and Accepted")->where("enrollment_id", Session::get("enrollment_id"))->where("awarded_school", getProgramName($value->program_id))->count();
             $tmp['availability'] =  $value->available_seats - $rs1;
 
-            foreach ($rising_composition as $rkey => $rvalue) {
+            if ($rising_composition && is_object($rising_composition)) {
+                foreach ($rising_composition as $rkey => $rvalue) {
                 $rs1 = Submissions::where("submission_status", "Offered and Accepted")->where("enrollment_id", Session::get("enrollment_id"))->where("awarded_school", getProgramName($value->program_id))->get();
 
                 foreach ($rs1 as $rs1k => $rs1v) {
@@ -104,6 +105,7 @@ class LateSubmissionController extends Controller
                     }
                 }
                 $tmp[$rkey] = $rvalue;
+                }
             }
             $lateData = LateSubmissionProcessLogs::join("process_selection", "process_selection.id", "late_submission_process_logs.process_log_id")->where("process_selection.commited", "Yes")->where("process_selection.type", "late_submission")->where("program_id", $value->program_id)->select('zoned_schools', 'late_submission_process_logs.id')->get();
             foreach ($lateData as $lkey => $lvalue) {

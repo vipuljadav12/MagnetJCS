@@ -45,7 +45,7 @@
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td>{{ $configuration->config_name }}</td>
                                 <td>
-                                    {{ str_limit(strip_tags($configuration->config_value), 200) }}
+                                    {{ \Illuminate\Support\Str::limit(strip_tags($configuration->config_value), 200) }}
                                 </td>
                                 <!-- <td class="text-center">
                                     <input id="{{ $configuration->id }}" type="checkbox"  class="js-switch js-switch-1 js-switch-xs status"  data-size="Small" {{ $configuration->status == 'Y' ? 'checked' : '' }} />

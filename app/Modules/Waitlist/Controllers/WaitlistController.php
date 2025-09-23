@@ -937,12 +937,12 @@ class WaitlistController extends Controller
         $gradeWiseProcessing = Config::get('variables.grade_wise_processing');
 
         $process_selection = ProcessSelection::where("enrollment_id", Session::get("enrollment_id"))->where("form_id", $application_id)->where("type", "waitlist")->orderBy("created_at", "DESC")->first();
-        $version = $process_selection->version;
+        $version = $process_selection ? $process_selection->version : null;
 
         $rsSwing = ProgramSwingData::where("enrollment_id", Session::get("enrollment_id"))->where("application_id", $application_id)->first();
         //dd($application_id, $rsSwing);
-        $swingPercent = $rsSwing->swing_percentage;
-        $swingArray = explode(",", $swingPercent); //$enrollment_racial->swing;
+        $swingPercent = $rsSwing ? $rsSwing->swing_percentage : null;
+        $swingArray = $swingPercent ? explode(",", $swingPercent) : []; //$enrollment_racial->swing;
         /* Program wise Availability and Rising capacity */
         $rs = Availability::where("enrollment_id", Session::get("enrollment_id"))->get();
         $programAvailability = [];
@@ -952,7 +952,8 @@ class WaitlistController extends Controller
             $rs1 = Submissions::where("submission_status", "Offered and Accepted")->where("enrollment_id", Session::get("enrollment_id"))->where("awarded_school", getProgramName($value->program_id))->count();
             $tmp['availability'] =  $value->available_seats - $rs1;
 
-            foreach ($rising_composition as $rkey => $rvalue) {
+            if ($rising_composition && is_object($rising_composition)) {
+                foreach ($rising_composition as $rkey => $rvalue) {
                 $rs1 = Submissions::where("submission_status", "Offered and Accepted")->where("enrollment_id", Session::get("enrollment_id"))->where("awarded_school", getProgramName($value->program_id))->get();
 
                 foreach ($rs1 as $rs1k => $rs1v) {
@@ -964,6 +965,7 @@ class WaitlistController extends Controller
                     }
                 }
                 $tmp[$rkey] = $rvalue;
+                }
             }
             $programAvailability[$value->program_id] = $tmp;
         }

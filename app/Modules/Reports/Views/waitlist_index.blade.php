@@ -46,10 +46,10 @@
                                 <div class="card shadow">
                                     <div class="card-body">
                                         <div class="text-right mb-10 d-flex justify-content-end align-items-center">
-                                            <input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideRace" @if($settings->race == "Y") checked @endif />&nbsp;Hide Race&nbsp;&nbsp;<input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideZone" @if($settings->zoned_school == "Y") checked @endif />&nbsp;Hide Zone School&nbsp;&nbsp;<input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideCommittee" @if($settings->committee_score == "Y") checked @endif/>&nbsp;Hide Committee
-                                            @if(count($test_scores_titles) > 0)&nbsp;&nbsp;<input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideTestScore" @if($settings->test_scores == "Y") checked @endif/>&nbsp;Hide Test Scores
+                                            <input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideRace" @if($settings && $settings->race == "Y") checked @endif />&nbsp;Hide Race&nbsp;&nbsp;<input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideZone" @if($settings && $settings->zoned_school == "Y") checked @endif />&nbsp;Hide Zone School&nbsp;&nbsp;<input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideCommittee" @if($settings && $settings->committee_score == "Y") checked @endif/>&nbsp;Hide Committee
+                                            @if(count($test_scores_titles) > 0)&nbsp;&nbsp;<input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideTestScore" @if($settings && $settings->test_scores == "Y") checked @endif/>&nbsp;Hide Test Scores
                                             @endif
-                                            &nbsp;&nbsp;<input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideGrade" @if($settings->grade == "Y") checked @endif />&nbsp;Hide Grade
+                                            &nbsp;&nbsp;<input type="checkbox" class="js-switch js-switch-1 js-switch-xs status" data-size="Small"  id="hideGrade" @if($settings && $settings->grade == "Y") checked @endif />&nbsp;Hide Grade
                                             <div class="d-none" style="padding-left: 5px;"><a href="{{url('/CDI-All.xls')}}" class="btn btn-secondary">Export</a></div>
                                         </div>
                                         @php $config_subjects = Config::get('variables.subjects') @endphp
@@ -413,32 +413,32 @@
 
         $(document).ready(function(){
             var hideArr = new Array();
-            @if($settings->race == "Y") 
+            @if($settings && $settings->race == "Y") 
                 $('.hiderace').addClass("d-none");
                dtbl_submission_list.$('.hiderace').addClass("d-none");
 
             @endif       
 
-            @if($settings->zoned_school == "Y")         
+            @if($settings && $settings->zoned_school == "Y")         
                 $('.hidezone').addClass("d-none");
                dtbl_submission_list.$('.hidezone').addClass("d-none");
 
             @endif       
 
-            @if($settings->grade == "Y") 
+            @if($settings && $settings->grade == "Y") 
                 $('.grade-col').addClass("d-none");
                 dtbl_submission_list.$('.grade-col').addClass("d-none");
 
             @endif       
 
-            @if($settings->committee_score == "Y") 
+            @if($settings && $settings->committee_score == "Y") 
                 $('.committee_score-col').addClass("d-none");
                 dtbl_submission_list.$('.committee_score-col').addClass("d-none");
                  
 
             @endif
 
-            @if($settings->test_scores == "Y") 
+            @if($settings && $settings->test_scores == "Y") 
                 $('.test_scores-col').addClass("d-none");
                 dtbl_submission_list.$('.test_scores-col').addClass("d-none");
                  

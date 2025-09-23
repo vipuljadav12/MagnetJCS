@@ -666,9 +666,9 @@ class GenerateApplicationDataController extends Controller
         $ids = array('"PreK"', '"K"', '"1"', '"2"', '"3"', '"4"', '"5"', '"6"', '"7"', '"8"', '"9"', '"10"', '"11"', '"12"');
         $ids_ordered = implode(',', $ids);
 
-        $grades = $submissions->orderByRaw('FIELD(submissions.next_grade,' . implode(",", $ids) . ')')->select(DB::raw("DISTINCT(next_grade)"))->get();
+        $grades = $submissions->clone()->orderByRaw('FIELD(submissions.next_grade,' . implode(",", $ids) . ')')->select(DB::raw("DISTINCT(next_grade)"))->get();
 
-        $submission_status = $submissions->orderBy('submission_status')->select(DB::raw("DISTINCT(submission_status)"))->get();
+        $submission_status = $submissions->clone()->select(DB::raw("DISTINCT(submission_status)"))->orderBy('submission_status')->get();
 
         return view("GenerateApplicationData::generated_form_index", compact('enrollment', 'programs', 'grades', 'submission_status'));
     }

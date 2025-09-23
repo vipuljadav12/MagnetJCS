@@ -3197,7 +3197,7 @@ class ReportsController extends Controller
         elseif ($grade == "PreK")
             $existGrade = "PreK";
         elseif ($grade == 0)
-            $existGrade = $gradeTab[0];
+            $existGrade = !empty($gradeTab) ? $gradeTab[0] : "K"; // Default to "K" if no grades available
         else
             $existGrade = $grade;
 
@@ -6765,12 +6765,12 @@ exit;*/
     public function export_submissions()
     {
         $enrollment = Enrollment::where("district_id", Session::get('district_id'))->get();
-        $submission_status = Submissions::where("district_id", Session::get('district_id'))->where("enrollment_id", Session::get('enrollment_id'))->orderBy('submission_status')->select(DB::raw("DISTINCT(submission_status)"))->get();
+        $submission_status = Submissions::where("district_id", Session::get('district_id'))->where("enrollment_id", Session::get('enrollment_id'))->select(DB::raw("DISTINCT(submission_status)"))->orderBy('submission_status')->get();
 
-        $first_programs = Submissions::where("district_id", Session::get('district_id'))->where("enrollment_id", Session::get('enrollment_id'))->orderBy('submission_status')->select(DB::raw("DISTINCT(first_choice_program_id)"))->get();
+        $first_programs = Submissions::where("district_id", Session::get('district_id'))->where("enrollment_id", Session::get('enrollment_id'))->select(DB::raw("DISTINCT(first_choice_program_id)"))->get();
 
-        $second_programs = Submissions::where("district_id", Session::get('district_id'))->where("enrollment_id", Session::get('enrollment_id'))->orderBy('submission_status')->select(DB::raw("DISTINCT(second_choice_program_id)"))->get();
-        $third_programs = Submissions::where("district_id", Session::get('district_id'))->where("enrollment_id", Session::get('enrollment_id'))->orderBy('submission_status')->select(DB::raw("DISTINCT(third_choice_program_id)"))->get();
+        $second_programs = Submissions::where("district_id", Session::get('district_id'))->where("enrollment_id", Session::get('enrollment_id'))->select(DB::raw("DISTINCT(second_choice_program_id)"))->get();
+        $third_programs = Submissions::where("district_id", Session::get('district_id'))->where("enrollment_id", Session::get('enrollment_id'))->select(DB::raw("DISTINCT(third_choice_program_id)"))->get();
 
         // dd($third_programs);
 

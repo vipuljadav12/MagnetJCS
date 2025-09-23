@@ -51,8 +51,8 @@
 @endsection
 @section('scripts')
     {{-- @include('layouts.admin.common.datatable') --}}
-    <script src="{{asset('resources/assets/common/js/jquery.validate.min.js')}}"></script>
-    <script src="{{asset('resources/assets/common/js/additional-methods.min.js')}}"></script>
+    <script src="{{asset('resources/assets/admin/js/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('resources/assets/admin/js/additional-methods.min.js')}}"></script>
     <!-- Sweet Alert -->
     <script src="{{url('/resources/assets/admin/plugins/sweet-alert2/sweetalert2.min.js')}}"></script>
     {{-- <script src="{{url('/resources/assets/plugins/sweet-alert2/jquery.sweet-alert.init.js')}}"></script> --}}
