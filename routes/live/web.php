@@ -11,6 +11,9 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::group(['domain' => '{company}.redefineapp.io', 'middleware' => 'SubDomain'], function()
 { 
     Auth::routes();

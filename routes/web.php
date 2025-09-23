@@ -25,6 +25,8 @@ Route::group(['domain' => 'magnet.mov', 'middleware' => 'SubDomain'], function()
 */
 //\App\Tenant::getTenants();
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 Route::get('/copydata', 'HomeController@copy_data');
