@@ -6,10 +6,10 @@ class MySQLCN
 	{
 		if($server == "")
 		{
-			$user = "hcs_liveusr";
-			$pass = "Chr#m@tc92";
+			$user = "root";
+			$pass = "";
 			$server = "localhost";
-			$dbase = "hcs_live";
+			$dbase = "magnet_jeflive";
 		}
 		$conn = new mysqli($server, $user, $pass, $dbase);
 		if($conn->connect_errno) {
