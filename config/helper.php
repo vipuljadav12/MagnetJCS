@@ -2207,7 +2207,7 @@ if (!function_exists('getSubmissionAcademicGradeData')) {
         return $data;
     }
 }
-if (!function_exists('checkPermgetCalculatedRaceission')) {
+if (!function_exists('getCalculatedRace')) {
     function getCalculatedRace($race)
     {
         $rs = \App\Modules\Submissions\Models\RaceDivision::where("actual_race", $race)->first();
