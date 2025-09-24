@@ -778,7 +778,7 @@ class HomeController extends Controller
 
 
             $this->sentSuccessEmail($emailArr);
-            $this->sendWhatsAppMessage($submission_data, $emailArr);
+            sendMessage($submission_data, $emailArr, 'app_confirmed', 'whatsapp');
 
             $rsp = SubmissionSteps::updateOrCreate(["session_id" => Session::get("step_session")], ['step_no' => 4]);
             $this->destroySessions();
@@ -805,17 +805,10 @@ class HomeController extends Controller
                     $instructions .= "<p class='text-center'><a class='btn btn-secondary' href='" . url('/download/instructions/' . $data->config_value) . "'><i class='fa fa-download'></i>&nbsp;Download</a>";
                 }
             }
-
-
             $instructions = trim($instructions);
-
-
-
-
             return view('layouts.errors.confirm_screen', compact("district", "msg_type", "confirmation_no", "confirm_msg", "confirm_subject", "confirm_title", "student_type", "application_data", "instructions"));
 
             // return view('layouts.errors.success_application',compact("district","confirmation_no"));
-
         }
     }
 
@@ -2243,8 +2236,6 @@ class HomeController extends Controller
         $data['next_grade'] = $rsData['next_grade'];
         $data['race'] = $rsData['race'];
         $data['current_signature_academy'] = $rsData['current_signature_academy'];
-
-        //return $data;
         $rs = ReturningStudentSubmissions::create($data);
         return redirect('/msgs/returnthankyou');
     }
@@ -2318,91 +2309,5 @@ class HomeController extends Controller
             'valid' => true,
             'message' => 'Enrollment period is active.'
         ];
-    }
-
-    public function sendWhatsAppMessage($submission_data, $emailArr)
-    {
-        try {
-            $twilioSid = config('variables.twilio.sid');
-            $twilioToken = config('variables.twilio.token');
-            $twilioWhatsAppNumber = config('variables.twilio.whatsapp_number');
-
-            if (!$twilioSid || !$twilioToken || !$twilioWhatsAppNumber) {
-                Log::warning('Twilio credentials not configured. Skipping WhatsApp message.');
-                return;
-            }
-            if (empty($submission_data->phone_number)) {
-                Log::warning('No phone number found for submission ID: ' . $submission_data->id);
-                return;
-            }
-            // Format phone number for WhatsApp (ensure it starts with country code)
-            $phoneNumber = $this->formatPhoneNumber($submission_data->phone_number);
-            $message = $this->createWhatsAppMessage($emailArr);
-
-            $url = "https://api.twilio.com/2010-04-01/Accounts/{$twilioSid}/Messages.json";
-            $response = Http::withBasicAuth($twilioSid, $twilioToken)
-                ->withOptions(['verify' => base_path('resources/certs/cacert.pem')])
-                ->asForm()
-                ->post($url, [
-                    'To' => "whatsapp:" . $phoneNumber,
-                    'From' => $twilioWhatsAppNumber,
-                    'Body' => strip_tags($message)
-                ]);
-
-            if ($response->successful()) {
-                $twilioMessage = $response->json();
-            } else {
-                throw new Exception('Twilio API request failed: ' . $response->body());
-            }
-        } catch (Exception $e) {
-            Log::error('Failed to send WhatsApp message', [
-                'submission_id' => $submission_data->id ?? 'unknown',
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-        }
-    }
-
-    public function formatPhoneNumber($phoneNumber)
-    {
-        $cleanNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
-        if (strlen($cleanNumber) == 10) {
-            $cleanNumber = '1' . $cleanNumber;
-        }
-        return '+' . $cleanNumber;
-    }
-
-    public function createWhatsAppMessage($emailArr)
-    {
-        $selected_language = Session::get('default_language', 'english');
-        if ($selected_language == 'spanish') {
-            $message = "🎓 *Confirmación de Solicitud*\n\n";
-            $message .= "Estimado/a {$emailArr['parent_name']},\n\n";
-            $message .= "¡Su solicitud para *{$emailArr['student_name']}* ha sido enviada exitosamente!\n\n";
-            $message .= "📋 *Número de Confirmación:* {$emailArr['confirm_number']}\n";
-            $message .= "📅 *Fecha de Envío:* {$emailArr['submission_date']}\n";
-            $message .= "🎯 *Grado Solicitado:* {$emailArr['next_grade']}\n\n";
-
-            if (!empty($emailArr['transcript_due_date'])) {
-                $message .= "📝 *Importante:* Fecha límite para transcripciones: {$emailArr['transcript_due_date']}\n\n";
-            }
-            $message .= "Recibirá un correo electrónico de confirmación detallado en breve.\n\n";
-            $message .= "¡Gracias por su solicitud! 🙏";
-        } else {
-            $message = "🎓 *Application Confirmation*\n\n";
-            $message .= "Dear {$emailArr['parent_name']},\n\n";
-            $message .= "Your application for *{$emailArr['student_name']}* has been successfully submitted!\n\n";
-            $message .= "📋 *Confirmation Number:* {$emailArr['confirm_number']}\n";
-            $message .= "📅 *Submission Date:* {$emailArr['submission_date']}\n";
-            $message .= "🎯 *Grade Applied For:* {$emailArr['next_grade']}\n\n";
-
-            if (!empty($emailArr['transcript_due_date'])) {
-                $message .= "📝 *Important:* Transcript due date: {$emailArr['transcript_due_date']}\n\n";
-            }
-            $message .= "You will receive a detailed confirmation email shortly.\n\n";
-            $message .= "Thank you for your application! 🙏";
-        }
-
-        return $message;
     }
 }

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 if (!function_exists('checkPermission')) {
@@ -2260,5 +2262,133 @@ if (!function_exists('check_last_process')) {
             }
         }
         return array("id" => 0, "finalObj" => "", "version" => 0);
+    }
+}
+
+if (!function_exists('sendMessage')) {
+    function sendMessage($submission_data, $emailArr, $messageKey = 'app_confirmed', $type = 'sms')
+    {
+        try {
+            $twilioSid = config('variables.twilio.sid');
+            $twilioToken = config('variables.twilio.token');
+
+            if ($type === 'whatsapp') {
+                $twilioNumber = config('variables.twilio.whatsapp_number');
+            } else {
+                $twilioNumber = config('variables.twilio.phone_number');
+            }
+
+            if (!$twilioSid || !$twilioToken || !$twilioNumber) {
+                Log::warning("Twilio credentials not configured. Skipping {$type} message.");
+                return false;
+            }
+
+            if (empty($submission_data->phone_number)) {
+                Log::warning("No phone number found for submission ID: " . $submission_data->id);
+                return false;
+            }
+
+            $phoneNumber = formatPhoneNumberForMessaging($submission_data->phone_number);
+            $message = createDynamicMessageContent($emailArr, $messageKey);
+            $recipient = ($type === 'whatsapp') ? "whatsapp:" . $phoneNumber : $phoneNumber;
+
+            $url = "https://api.twilio.com/2010-04-01/Accounts/{$twilioSid}/Messages.json";
+            $response = Http::withBasicAuth($twilioSid, $twilioToken)
+                ->withOptions(['verify' => base_path('resources/certs/cacert.pem')])
+                ->asForm()
+                ->post($url, [
+                    'To' => $recipient,
+                    'From' => $twilioNumber,
+                    'Body' => ($type === 'whatsapp') ? strip_tags($message) : $message
+                ]);
+
+            if ($response->successful()) {
+                return true;
+            } else {
+                throw new \Exception('Twilio API request failed: ' . $response->body());
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to send {$messageKey} {$type} message", [
+                'submission_id' => $submission_data->id ?? 'unknown',
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'type' => $type,
+                'message_key' => $messageKey
+            ]);
+            return false;
+        }
+    }
+}
+
+if (!function_exists('formatPhoneNumberForMessaging')) {
+    function formatPhoneNumberForMessaging($phoneNumber)
+    {
+        $cleanNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+        if (strlen($cleanNumber) == 10) {
+            $cleanNumber = '1' . $cleanNumber;
+        }
+        return '+' . $cleanNumber;
+    }
+}
+
+if (!function_exists('createDynamicMessageContent')) {
+    function createDynamicMessageContent($emailArr, $messageKey = 'app_confirmed')
+    {
+        $selected_language = Session::get('default_language', 'english');
+        switch ($messageKey) {
+            case 'app_confirmed':
+                return createAppConfirmedMessage($emailArr, $selected_language);
+
+            case 'custom_communication':
+                return createCustomCommunicationMessage($emailArr, $selected_language);
+
+            default:
+                return createAppConfirmedMessage($emailArr, $selected_language);
+        }
+    }
+}
+
+if (!function_exists('createAppConfirmedMessage')) {
+    function createAppConfirmedMessage($emailArr, $language = 'english')
+    {
+        if ($language == 'spanish') {
+            $message = "Confirmacion de Solicitud\n\n";
+            $message .= "Estimado/a {$emailArr['parent_name']},\n\n";
+            $message .= "Su solicitud para {$emailArr['student_name']} ha sido enviada exitosamente!\n\n";
+            $message .= "Numero de Confirmacion: {$emailArr['confirm_number']}\n";
+            $message .= "Fecha de Envio: {$emailArr['submission_date']}\n";
+            $message .= "Grado Solicitado: {$emailArr['next_grade']}\n\n";
+
+            if (!empty($emailArr['transcript_due_date'])) {
+                $message .= "Importante: Fecha limite para transcripciones: {$emailArr['transcript_due_date']}\n\n";
+            }
+            $message .= "Recibira un correo electronico de confirmacion detallado en breve.\n\n";
+            $message .= "Gracias por su solicitud!";
+        } else {
+            $message = "Application Confirmation\n\n";
+            $message .= "Dear {$emailArr['parent_name']},\n\n";
+            $message .= "Your application for {$emailArr['student_name']} has been successfully submitted!\n\n";
+            $message .= "Confirmation Number: {$emailArr['confirm_number']}\n";
+            $message .= "Submission Date: {$emailArr['submission_date']}\n";
+            $message .= "Grade Applied For: {$emailArr['next_grade']}\n\n";
+
+            if (!empty($emailArr['transcript_due_date'])) {
+                $message .= "Important: Transcript due date: {$emailArr['transcript_due_date']}\n\n";
+            }
+            $message .= "You will receive a detailed confirmation email shortly.\n\n";
+            $message .= "Thank you for your application!";
+        }
+
+        return $message;
+    }
+}
+
+if (!function_exists('createCustomCommunicationMessage')) {
+    function createCustomCommunicationMessage($emailArr, $language = 'english')
+    {
+        $message = "Confirmation Number: {$emailArr['confirm_number']}\n";
+        $message .= "Please check your email. JCS has sent you communication email regarding your submission";
+
+        return $message;
     }
 }

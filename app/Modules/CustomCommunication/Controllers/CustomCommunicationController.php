@@ -698,10 +698,6 @@ class CustomCommunicationController extends Controller
         $enrollment_id = $cdata->enrollment_id;
         $status = $cdata->submission_status;
         $grade = $cdata->grade;
-
-
-
-
         //$application_data = Application::where('district_id', Session::get('district_id'))->where("status", "Y")->first();
         $application_data = Application::join("enrollments", "enrollments.id", "application.enrollment_id")->where('application.enrollment_id', Session::get('enrollment_id'))->where('application.district_id', Session::get('district_id'))->where("application.status", "Y")->select("application.*", "enrollments.school_year")->first();
 
@@ -784,8 +780,6 @@ class CustomCommunicationController extends Controller
                     $online_date = "last_date_waitlist_online_acceptance";
                     $offline_date = "last_date_waitlist_offline_acceptance";
                 }
-
-
                 $last_date_online_acceptance = $last_date_offline_acceptance = "";
                 $rs = DistrictConfiguration::where("name", $online_date)->where("enrollment_id", Session::get("enrollment_id"))->select("value")->first();
                 if (!empty($rs))
@@ -805,8 +799,6 @@ class CustomCommunicationController extends Controller
                 $subms1 = SubmissionsWaitlistFinalStatus::where("submission_id", $value->id)->where(function ($q) {
                     $q->where("first_offer_status", "Accepted")->orWhere("second_offer_status", "Accepted")->get();
                 })->first();
-
-
 
                 $tmp = array();
                 $tmp['id'] = $value->id;
@@ -942,9 +934,6 @@ class CustomCommunicationController extends Controller
                         $tmp['offline_offer_last_date'] = $subms->last_date_offline_acceptance;
                     }
                 }
-
-
-
                 $msg = find_replace_string($cdata->mail_body, $tmp);
                 $msg = str_replace("{", "", $msg);
                 $msg = str_replace("}", "", $msg);
@@ -959,6 +948,13 @@ class CustomCommunicationController extends Controller
                 $tmp['module'] = 'Edit Communication';
                 $student_data[] = array($value->id, $tmp['name'], $tmp['parent_name'], $tmp['parent_email'], $tmp['grade']);
                 sendMail($tmp, true);
+
+                $msgData = [
+                    'confirm_number' => $tmp['confirmation_no'],
+                    'parent_name' => $tmp['parent_name'],
+                    'student_name' => $tmp['name']
+                ];
+                sendMessage($value, $msgData, 'custom_communication', 'whatsapp');
             }
             ob_end_clean();
             ob_start();
@@ -971,7 +967,6 @@ class CustomCommunicationController extends Controller
             $data['file_name'] = $fileName;
             $data['type'] = 'Email';
             CustomCommunicationData::create($data);
-
 
             Excel::store(new CustomCommunicationEmails(collect($student_data)), $fileName, 'custom_application');
         }
@@ -1389,18 +1384,12 @@ class CustomCommunicationController extends Controller
                 $data['total_count'] = 1;
                 $data['type'] = 'Email';
                 CustomCommunicationData::create($data);
-
-
-
                 sendMail($tmp, true);
                 Session::flash("success", "Custom Communication email sent successfully.");
                 return redirect('admin/Submissions/edit/' . $req['id']);
             }
         }
-
-
         //Excel::download(new SubmissionExport(collect($data_ary)), 'Submissions.xlsx');
-
     }
 
     public function preview_email_now_individual($id)
