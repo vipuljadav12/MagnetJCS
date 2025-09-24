@@ -778,11 +778,10 @@ class HomeController extends Controller
 
 
             $this->sentSuccessEmail($emailArr);
+            $this->sendWhatsAppMessage($submission_data, $emailArr);
+
             $rsp = SubmissionSteps::updateOrCreate(["session_id" => Session::get("step_session")], ['step_no' => 4]);
             $this->destroySessions();
-
-
-
             $confirm_msg = str_replace("{student_name}", $emailArr['first_name'] . " " . $emailArr['last_name'], $confirm_msg);
             $confirm_msg = str_replace("{parent_name}", $emailArr['parent_first_name'] . " " . $emailArr['parent_last_name'], $confirm_msg);
             $confirm_msg = str_replace("{confirm_number}", $emailArr['confirm_number'], $confirm_msg);
