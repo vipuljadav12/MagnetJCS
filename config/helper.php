@@ -2351,6 +2351,17 @@ if (!function_exists('createDynamicMessageContent')) {
 if (!function_exists('createAppConfirmedMessage')) {
     function createAppConfirmedMessage($emailArr, $language = 'english')
     {
+        if (!empty($emailArr['app_sms_text'])) {
+            $message = $emailArr['app_sms_text'];
+            $message = str_replace('{confirmation_no}', $emailArr['confirm_number'], $message);
+            $message = str_replace('{parent_name}', $emailArr['parent_name'], $message);
+            $message = str_replace('{student_name}', $emailArr['student_name'], $message);
+            $message = str_replace('{submission_date}', $emailArr['submission_date'], $message);
+            $message = str_replace('{next_grade}', $emailArr['next_grade'], $message);
+            $message = str_replace('{transcript_due_date}', $emailArr['transcript_due_date'], $message);
+            return $message;
+        }
+
         if ($language == 'spanish') {
             $message = "Confirmacion de Solicitud\n\n";
             $message .= "Estimado/a {$emailArr['parent_name']},\n\n";
@@ -2378,7 +2389,6 @@ if (!function_exists('createAppConfirmedMessage')) {
             $message .= "You will receive a detailed confirmation email shortly.\n\n";
             $message .= "Thank you for your application!";
         }
-
         return $message;
     }
 }
@@ -2386,6 +2396,13 @@ if (!function_exists('createAppConfirmedMessage')) {
 if (!function_exists('createCustomCommunicationMessage')) {
     function createCustomCommunicationMessage($emailArr, $language = 'english')
     {
+        if (!empty($emailArr['custom_sms_text'])) {
+            $message = $emailArr['custom_sms_text'];
+            $message = str_replace('{confirmation_no}', $emailArr['confirm_number'], $message);
+            $message = str_replace('{parent_name}', $emailArr['parent_name'], $message);
+            $message = str_replace('{student_name}', $emailArr['student_name'], $message);
+            return $message;
+        }
         $message = "Confirmation Number: {$emailArr['confirm_number']}\n";
         $message .= "Please check your email. JCS has sent you communication email regarding your submission";
 

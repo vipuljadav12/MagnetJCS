@@ -58,7 +58,6 @@ class CustomCommunicationController extends Controller
 
     public function store(Request $request)
     {
-        //print_r($request->all());exit;
         $validateData = $request->validate([
             'template_name' => 'required|max:255',
             'enrollment_id' => 'required',
@@ -81,6 +80,7 @@ class CustomCommunicationController extends Controller
         if (isset($request->send_email_now) || isset($request->save_email)) {
             $data['mail_subject'] = $req['mail_subject'];
             $data['mail_body'] = $req['mail_body'];
+            $data['sms_text'] = $req['sms_text'];
         }
         if (isset($request->generate_letter_now) || isset($request->save_letter)) {
             $data['letter_body'] = $req['letter_body'];
@@ -131,6 +131,7 @@ class CustomCommunicationController extends Controller
         if (isset($request->send_email_now) || isset($request->save_email)) {
             $data['mail_subject'] = $req['mail_subject'];
             $data['mail_body'] = $req['mail_body'];
+            $data['sms_text'] = $req['sms_text'];
         }
         if (isset($request->generate_letter_now) || isset($request->save_letter)) {
             $data['letter_body'] = $req['letter_body'];
@@ -952,9 +953,10 @@ class CustomCommunicationController extends Controller
                 $msgData = [
                     'confirm_number' => $tmp['confirmation_no'],
                     'parent_name' => $tmp['parent_name'],
-                    'student_name' => $tmp['name']
+                    'student_name' => $tmp['name'],
+                    'custom_sms_text' => $cdata->sms_text
                 ];
-                sendMessage($value, $msgData, 'custom_communication', 'whatsapp');
+                sendMessage($value, $msgData, 'custom_communication');
             }
             ob_end_clean();
             ob_start();

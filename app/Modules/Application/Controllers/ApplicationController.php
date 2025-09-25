@@ -71,7 +71,6 @@ class ApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->form_id;
         $msg = ['program_grade_id.required' => 'The program grade field is required. '];
         $request->validate([
             'form_id' => 'required',
@@ -132,8 +131,6 @@ class ApplicationController extends Controller
             }
         }
         $applicationProgram = ApplicationProgram::insert($applicationProgram);
-
-
         $conf_data = array();
         $conf_data['application_id'] = $application->id;
         $conf_data['active_screen'] = $request->active_screen;
@@ -148,6 +145,7 @@ class ApplicationController extends Controller
         $conf_data['pending_email_subject'] = $request->pending_email_subject;
         $conf_data['grade_cdi_welcome_text'] = $request->grade_cdi_welcome_text;
         $conf_data['grade_cdi_confirm_text'] = $request->grade_cdi_confirm_text;
+        $conf_data['sms_text'] = $request->sms_text;
 
         $rs = ApplicationConfiguration::create($conf_data);
 
@@ -217,8 +215,6 @@ class ApplicationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // return $request;
-        //
         $msg = ['program_grade_id.required' => 'The program grade field is required. '];
         $request->validate([
             'form_id' => 'required',
@@ -268,13 +264,8 @@ class ApplicationController extends Controller
         $newObj = Application::where('id', $id)->first();
 
         $this->modelChanges($initObj, $newObj, "application");
-
-
-
-
         $applicationProgram = [];
         $gdArr = array();
-
         $old_entries = ApplicationProgram::where('application_id', $id)->get(['id']);
         $old_ids = [];
         foreach ($old_entries as $key => $value) {
@@ -306,8 +297,6 @@ class ApplicationController extends Controller
                 ApplicationProgram::where('id', $value)->delete();
             }
         }
-
-
         /*if (isset($request->program_grade_id)) 
         {
              foreach($request->program_grade_id as $key => $value) 
@@ -341,10 +330,7 @@ class ApplicationController extends Controller
         $conf_data['pending_screen_subject'] = $request->pending_screen_subject;
         $conf_data['grade_cdi_welcome_text'] = $request->grade_cdi_welcome_text;
         $conf_data['grade_cdi_confirm_text'] = $request->grade_cdi_confirm_text;
-
-
-
-
+        $conf_data['sms_text'] = $request->sms_text;
         $oldrs = ApplicationConfiguration::where("application_id", $id)->first();
         if (!empty($oldrs)) {
             $rs = ApplicationConfiguration::where('application_id', $id)->update($conf_data);
@@ -403,13 +389,13 @@ class ApplicationController extends Controller
     {
         try {
             $enrollment = Enrollment::where('id', $request->id)->first();
-            
+
             if (!$enrollment) {
                 return response()->json(['error' => 'Enrollment not found'], 404);
             }
-            
+
             return response()->json([
-                'start' => $enrollment->begning_date, 
+                'start' => $enrollment->begning_date,
                 'end' => $enrollment->ending_date
             ]);
         } catch (\Exception $e) {

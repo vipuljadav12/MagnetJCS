@@ -4,14 +4,13 @@ namespace App\Modules\Application\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ApplicationConfiguration extends Model {
-
-    //
-    public $timestamps = false;
-	protected $table='application_configuration';
-	public $primary_key='id';
+class ApplicationConfiguration extends Model
+{
+	public $timestamps = false;
+	protected $table = 'application_configuration';
+	public $primary_key = 'id';
 	public $traitField = "application_id";
-	public $fillable=[
+	public $fillable = [
 		'application_id',
 		'active_screen',
 		'active_email',
@@ -24,6 +23,7 @@ class ApplicationConfiguration extends Model {
 		'pending_screen_title',
 		'pending_screen_subject',
 		'grade_cdi_welcome_text',
-		'grade_cdi_confirm_text'
+		'grade_cdi_confirm_text',
+		'sms_text'
 	];
 }

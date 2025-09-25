@@ -340,7 +340,9 @@ return [
     'twilio' => [
         'sid' => env('TWILIO_SID'),
         'token' => env('TWILIO_AUTH_TOKEN'),
-        'phone_number' => env('TWILIO_PHONE_NUMBER'),
-        'whatsapp_number' => env('TWILIO_WHATSAPP_NUMBER', 'whatsapp:+14155238886'),
+        // 'phone_number' => env('TWILIO_PHONE_NUMBER','+14155238886'),
+        // 'whatsapp_number' => env('TWILIO_WHATSAPP_NUMBER', 'whatsapp:+14155238886'),
+        'phone_number' => env('TWILIO_PHONE_NUMBER', '+15107564901'),
+        'whatsapp_number' => env('TWILIO_WHATSAPP_NUMBER', 'whatsapp:+15107564901'),
     ],
 ];
